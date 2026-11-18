@@ -1,73 +1,156 @@
-import mongoose, { Schema, Document } from 'mongoose';
-import { PlayerPosition, PlayerCategory, PlayerAuctionStatus } from '../types';
+import mongoose, { Document, Schema } from 'mongoose';
+
+export type PlayingPosition = 'Goalkeeper' | 'Defender' | 'Midfielder' | 'Forward';
+export type PlayerStatus = 'PENDING' | 'APPROVED' | 'REJECTED';
+export type AuctionStatus = 'upcoming' | 'live' | 'sold' | 'unsold' | 'withdrawn';
 
 export interface IPlayer extends Document {
-  name: string;
+  registrationId: string;
+  fullName: string;
+  dateOfBirth: Date;
+  phoneNumber: string;
+  email: string;
+  playingPosition: PlayingPosition;
+  photoUrl: string;
+  photoPublicId?: string;
+  status: PlayerStatus;
+  rejectionReason?: string;
+  reviewedAt?: Date;
+  reviewedBy?: string;
+
+  // Auction & League Integration fields (used once APPROVED)
+  auctionStatus: AuctionStatus;
+  tier?: 'Platinum' | 'Gold' | 'Silver' | 'Bronze';
+  basePrice?: number;
+  soldPrice?: number;
+  teamId?: mongoose.Types.ObjectId | string;
+  teamName?: string;
+  overallRating?: number;
   jerseyNumber?: number;
-  position: PlayerPosition;
-  category: PlayerCategory;
-  age: number;
-  nationality?: string;
-  basePrice: number;
-  finalBidAmount?: number;
-  auctionStatus: PlayerAuctionStatus;
-  teamId?: mongoose.Types.ObjectId;
-  stats?: {
-    matchesPlayed: number;
-    goals: number;
-    assists: number;
-    cleanSheets?: number;
-    yellowCards: number;
-    redCards: number;
-  };
-  phone?: string;
-  email?: string;
-  photoUrl?: string;
+
   createdAt: Date;
   updatedAt: Date;
 }
 
 const PlayerSchema = new Schema<IPlayer>(
   {
-    name: { type: String, required: true, trim: true },
-    jerseyNumber: { type: Number, min: 1, max: 99 },
-    position: {
+    registrationId: {
       type: String,
-      enum: ['GK', 'DEF', 'MID', 'FWD'],
-      required: true,
-      default: 'MID',
+      required: [true, 'Registration ID is required'],
+      unique: true,
+      index: true,
+      trim: true,
+      uppercase: true,
     },
-    category: {
+    fullName: {
       type: String,
-      enum: ['Icon', 'Gold', 'Silver', 'Bronze', 'Emerging'],
-      required: true,
-      default: 'Silver',
+      required: [true, 'Full name is required'],
+      trim: true,
+      minlength: [2, 'Full name must be at least 2 characters'],
+      maxlength: [100, 'Full name cannot exceed 100 characters'],
     },
-    age: { type: Number, required: true, min: 14, max: 50 },
-    nationality: { type: String, default: 'Domestic' },
-    basePrice: { type: Number, required: true, min: 0 },
-    finalBidAmount: { type: Number, min: 0 },
+    dateOfBirth: {
+      type: Date,
+      required: [true, 'Date of birth is required'],
+    },
+    phoneNumber: {
+      type: String,
+      required: [true, 'Phone number is required'],
+      unique: true,
+      index: true,
+      trim: true,
+    },
+    email: {
+      type: String,
+      required: [true, 'Email is required'],
+      unique: true,
+      index: true,
+      trim: true,
+      lowercase: true,
+      match: [/^\S+@\S+\.\S+$/, 'Please provide a valid email address'],
+    },
+    playingPosition: {
+      type: String,
+      required: [true, 'Playing position is required'],
+      enum: {
+        values: ['Goalkeeper', 'Defender', 'Midfielder', 'Forward'],
+        message: '{VALUE} is not a valid playing position',
+      },
+      index: true,
+    },
+    photoUrl: {
+      type: String,
+      required: [true, 'Player profile photo is required'],
+    },
+    photoPublicId: {
+      type: String,
+      default: null,
+    },
+    status: {
+      type: String,
+      enum: ['PENDING', 'APPROVED', 'REJECTED'],
+      default: 'PENDING',
+      index: true,
+    },
+    rejectionReason: {
+      type: String,
+      default: null,
+    },
+    reviewedAt: {
+      type: Date,
+      default: null,
+    },
+    reviewedBy: {
+      type: String,
+      default: null,
+    },
+
+    // Auction pool fields
     auctionStatus: {
       type: String,
-      enum: ['available', 'bidding', 'sold', 'unsold'],
-      default: 'available',
+      enum: ['upcoming', 'live', 'sold', 'unsold', 'withdrawn'],
+      default: 'upcoming',
+      index: true,
     },
-    teamId: { type: Schema.Types.ObjectId, ref: 'Team' },
-    stats: {
-      matchesPlayed: { type: Number, default: 0 },
-      goals: { type: Number, default: 0 },
-      assists: { type: Number, default: 0 },
-      cleanSheets: { type: Number, default: 0 },
-      yellowCards: { type: Number, default: 0 },
-      redCards: { type: Number, default: 0 },
+    tier: {
+      type: String,
+      enum: ['Platinum', 'Gold', 'Silver', 'Bronze'],
+      default: 'Silver',
     },
-    phone: { type: String },
-    email: { type: String },
-    photoUrl: { type: String },
+    basePrice: {
+      type: Number,
+      default: 50000,
+    },
+    soldPrice: {
+      type: Number,
+      default: null,
+    },
+    teamId: {
+      type: Schema.Types.ObjectId,
+      ref: 'Team',
+      default: null,
+    },
+    teamName: {
+      type: String,
+      default: null,
+    },
+    overallRating: {
+      type: Number,
+      default: 75,
+      min: 50,
+      max: 99,
+    },
+    jerseyNumber: {
+      type: Number,
+      default: null,
+    },
   },
   {
     timestamps: true,
   }
 );
+
+// Compound text index for name and search
+PlayerSchema.index({ fullName: 'text', email: 'text', registrationId: 'text' });
 
 export const Player = mongoose.model<IPlayer>('Player', PlayerSchema);

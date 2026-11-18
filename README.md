@@ -1,256 +1,190 @@
 # ⚽ Football League Management & Live Player Auction System
 
-Professional, full-stack **MERN + TypeScript** platform for tournament management, franchise roster building, and live player auctions.
+A professional, full-stack **MERN + TypeScript** platform for tournament management, franchise roster building, public player applications, and live player auctions.
 
 ---
 
-## 📋 Phase 1: Project Setup & Admin Dashboard Architecture
+## 🏛️ System Architecture
 
-Phase 1 establishes the production architecture, TypeScript configurations, database layer, responsive dark football interface, and all 11 core admin modules.
-
-### ✨ Highlights
-- **Football-Themed Dark Design**: Deep pitch blacks (`#080c14`, `#0d131f`), pitch border accents, subtle grid lines, and vibrant turf green (`#10b981` / `#22c55e`).
-- **Complete Admin Suite**: Working navigation and dedicated interactive views for all 11 admin sections.
-- **Robust Telemetry & Health Monitoring**: Live API and MongoDB status indicators with latency and heap memory tracking.
-- **Graceful Database Fallback**: Auto-detects local/remote MongoDB and safely transitions between persistent storage and demo showcase mode.
-- **Production-Ready Codebase**: Fully typed with strict TypeScript, modular services, centralized error handling, and reusable components.
-
----
-
-## 🛠️ Technology Stack
-
-| Domain | Technology | Purpose |
-| :--- | :--- | :--- |
-| **Frontend** | React 18 + TypeScript | Component-based UI with strict static types |
-| **Tooling** | Vite 6 | Lightning-fast HMR and optimized bundler |
-| **Routing** | React Router DOM 6 | Declarative client-side routing & active navigation |
-| **Styling** | Tailwind CSS 3 | Utility-first pitch dark palette & responsive design |
-| **Icons** | Lucide React | High-performance SVG icons |
-| **Backend** | Node.js + Express + TypeScript | Type-safe RESTful API server |
-| **Database** | MongoDB + Mongoose 8 | Document database with schema models |
-| **Validation** | Zod | Runtime schema request validation |
-| **Security & Logging** | Helmet + Morgan + CORS | HTTP security headers and structured logging |
-
----
-
-## 🗂️ Project Structure
+The project is structured into three decoupled applications sharing a single Node.js/Express backend and MongoDB database:
 
 ```
-football-league-management-system/
-├── package.json                 # Root scripts for concurrently running client & server
-├── .env.example                 # Root environment variables template
-├── README.md                    # Comprehensive documentation and startup guide
-│
-├── server/                      # Express + TypeScript Backend
-│   ├── .env.example             # Server environment template
-│   ├── tsconfig.json            # Server TypeScript configuration
-│   └── src/
-│       ├── config/              # Environment config and MongoDB connector
-│       │   ├── db.ts            # Mongoose connection with fallback telemetry
-│       │   └── env.ts           # Dotenv configuration
-│       ├── controllers/         # Request handling logic
-│       │   ├── dashboard.controller.ts
-│       │   └── health.controller.ts
-│       ├── middleware/          # Security, validation, and error boundaries
-│       │   ├── errorHandler.ts  # Centralized error handler
-│       │   ├── notFound.ts      # 404 handler
-│       │   └── validateRequest.ts # Zod request validation
-│       ├── models/              # Mongoose data schemas
-│       │   ├── Player.ts
-│       │   ├── Team.ts
-│       │   ├── Registration.ts
-│       │   ├── AuctionSession.ts
-│       │   └── Fixture.ts
-│       ├── routes/              # Modular API endpoints
-│       │   ├── index.ts
-│       │   ├── health.routes.ts
-│       │   └── dashboard.routes.ts
-│       ├── services/            # Business logic and database aggregation
-│       │   └── dashboard.service.ts
-│       ├── types/               # TypeScript interfaces and API schemas
-│       ├── utils/               # Structured logger & standardized apiResponse
-│       └── server.ts            # Application bootstrap & graceful shutdown
-│
-└── client/                      # React + TypeScript + Vite Frontend
-    ├── index.html               # Entry HTML with dark theme meta
-    ├── tailwind.config.js       # Pitch dark palette and glow shadows
-    ├── vite.config.ts           # Vite bundler config with /api reverse proxy
-    └── src/
-        ├── assets/              # Static media assets
-        ├── components/
-        │   ├── common/          # Reusable UI primitives (Button, Badge, Card, StatCard, Modal, SearchBar, Skeleton)
-        │   ├── dashboard/       # Dashboard widgets (StatsOverview, PositionChart, TrendsChart, BudgetTable, ActivityFeed, HealthWidget)
-        │   └── layout/          # Sidebar, Header with live health badge, DashboardLayout
-        ├── hooks/               # Custom React hooks (useDashboardData, useHealthCheck)
-        ├── pages/               # 11 Dedicated Admin Management Views
-        │   ├── DashboardPage.tsx       # Live overview & metrics
-        │   ├── PlayersPage.tsx         # Player pool & roster inspection
-        │   ├── RegistrationsPage.tsx   # Candidate review & verifications
-        │   ├── TeamsPage.tsx           # Franchise clubs & purse caps
-        │   ├── LiveAuctionPage.tsx     # Stage arena & lot queue preview
-        │   ├── TeamSquadsPage.tsx      # Formations & starting XI board
-        │   ├── PosterGeneratorPage.tsx # Matchday graphic design studio
-        │   ├── FixturesPage.tsx        # Tournament match calendar
-        │   ├── MatchResultsPage.tsx    # Official scorelines & reports
-        │   ├── PointsTablePage.tsx     # League standings & form table
-        │   ├── SettingsPage.tsx        # System configuration & testing
-        │   └── NotFoundPage.tsx        # 404 football boundary screen
-        ├── services/            # Typed HTTP client & API abstraction
-        ├── types/               # Frontend TypeScript domain types
-        ├── App.tsx              # Router routing tree
-        └── main.tsx             # React DOM root entrypoint
+                                      ┌──────────────────────────────────────────────┐
+                                      │        Cloudinary CDN / Local Disk           │
+                                      │            (Player Photo Uploads)            │
+                                      └──────────────────────┬───────────────────────┘
+                                                             │
+┌──────────────────────────────┐              ┌──────────────┴──────────────┐              ┌──────────────────────────────┐
+│  player-registration (5174)  │              │        server (5000)        │              │    admin-dashboard (5173)    │
+│   Public Candidate Portal    │ ── POST ───► │  Shared Express RESTful API │ ◄── GET/PATCH│   Private Management Console │
+│  - 6 Mandatory Fields Form   │              │  - JWT & Role Authentication│              │  - Review Player Applications│
+│  - Photo Upload & Preview    │ ◄── Status ──│  - Duplicate Prevention     │              │  - Approve / Reject Workflow │
+│  - Status Tracking by ID     │              │  - Cloudinary / Local Store │              │  - Auction Pool Gating       │
+└──────────────────────────────┘              └──────────────┬──────────────┘              └──────────────────────────────┘
+                                                             │
+                                              ┌──────────────┴──────────────┐
+                                              │    MongoDB Database / Mem   │
+                                              │  - Players & Registrations  │
+                                              │  - Admins & Tournament Data │
+                                              └─────────────────────────────┘
 ```
+
+| Application | Port | Description | Tech Stack |
+| :--- | :--- | :--- | :--- |
+| **`server`** | `5000` | Shared backend REST API, auth & storage | Node.js, Express, TypeScript, Mongoose, Multer, Zod, JWT |
+| **`admin-dashboard`** | `5173` | Private tournament management console | React 18, TypeScript, Vite, Tailwind CSS, Lucide React |
+| **`player-registration`**| `5174` | Public player application & status portal | React 18, TypeScript, Vite, Tailwind CSS, Lucide React |
 
 ---
 
-## 🚀 Quick Start Guide
+## 🚀 Phase 2 Features: Player Registration & Admin Integration
+
+### A. Public Player Registration Website (`http://localhost:5174`)
+- **Pitch-Dark Football Theme**: Dark background (`#080c14`), pitch grass accents (`#10b981`), glowing badges, and responsive design for mobile & desktop.
+- **Strict 6-Field Registration Form**:
+  1. `fullName`: Candidate's full name (min 2 chars, letters and common symbols).
+  2. `dateOfBirth`: Validated for tournament eligibility (ages 12 to 60).
+  3. `phoneNumber`: E.164 international format validation (7 to 15 digits).
+  4. `email`: Unique email validation.
+  5. `playingPosition`: Mandatory selection: `Goalkeeper`, `Defender`, `Midfielder`, or `Forward`.
+  6. `photo`: Secure file upload (JPG/JPEG/PNG, up to 5MB) with instant live preview and replacement before submission.
+- **Automated Registration ID**: Generates an official `PLR-2026-XXXXXX` unique identifier.
+- **Duplicate Prevention**: Email and phone number are indexed and verified before creation (returns `409 Conflict`).
+- **Application Status Checker**: Public lookup tool allows players to check status by Registration ID or email. Candidate names are masked (`John D***`) to protect privacy.
+
+### B. Admin Dashboard Integration (`http://localhost:5173/registrations`)
+- **Admin JWT Authentication**: Protected admin routes with token expiration and role checking.
+- **Comprehensive Candidate View**: Inspect all 6 submitted fields, high-resolution photo thumbnails, submission timestamps, and status badges.
+- **Search & Filtering**: Real-time filtering by playing position (`Goalkeeper`, `Defender`, `Midfielder`, `Forward`) and status (`PENDING`, `APPROVED`, `REJECTED`), plus full-text search across name, email, phone, and registration ID.
+- **Approve Workflow**: Approving an application assigns the player to the **Upcoming Auction Pool** with an initial base price.
+- **Reject Workflow**: Rejection prompt records official reason (e.g., medical criteria, documentation) and informs the player via the status checker.
+- **Auction Pool Enforcement**: Only **APPROVED** players are eligible for the upcoming live auction.
+
+---
+
+## 🔐 Default Admin Credentials
+
+Default credentials seeded on initialization:
+- **Email**: `admin@football.league`
+- **Password**: `Admin@123456`
+- **Role**: `superadmin`
+
+> Admin tokens are cryptographically signed using `JWT_SECRET` in `server/.env`.
+
+---
+
+## ⚙️ Quick Start Guide
 
 ### 1. Prerequisites
-- **Node.js**: v18.0.0 or higher (`node -v`)
-- **npm**: v9.0.0 or higher (`npm -v`)
-- **MongoDB**: Optional for Phase 1. If running locally (`127.0.0.1:27017`) or configured with MongoDB Atlas, the backend automatically connects. If unavailable, the server automatically boots in standalone mode with demo data.
-
----
+- **Node.js** v18+ (tested on Node v20/v24)
+- **npm** v9+
+- *(Optional)* **MongoDB** running locally on `mongodb://127.0.0.1:27017` or MongoDB Atlas URI (if MongoDB is offline, the backend seamlessly runs with an in-memory repository).
 
 ### 2. Installation
-Run the root helper command to install dependencies across root, server, and client:
-
+Install all dependencies across all 3 applications:
 ```bash
 npm run install:all
 ```
 
-Or install individually:
-
-```bash
-# Server dependencies
-cd server
-npm install
-
-# Client dependencies
-cd ../client
-npm install
-```
-
----
-
-### 3. Environment Setup
-
-Copy `.env.example` in both server and client:
-
-```bash
-# Backend configuration
-cp server/.env.example server/.env
-
-# Frontend configuration
-cp client/.env.example client/.env
-```
-
-**`server/.env` contents:**
-```env
-PORT=5000
-NODE_ENV=development
-MONGODB_URI=mongodb://127.0.0.1:27017/football_league
-CLIENT_URL=http://localhost:5173
-LOG_LEVEL=debug
-```
-
-**`client/.env` contents:**
-```env
-VITE_API_URL=/api
-```
-
----
-
-### 4. Running the Application
-
-You can start both frontend and backend concurrently from the root directory:
-
+### 3. Start All Applications Concurrently
+Run backend server and both frontends with a single command:
 ```bash
 npm run dev
 ```
 
-Or run each in a dedicated terminal:
+This starts:
+- 🚀 **Server**: `http://localhost:5000`
+- 🖥️ **Admin Dashboard**: `http://localhost:5173`
+- ⚽ **Player Registration**: `http://localhost:5174`
 
+---
+
+## 🧪 Comprehensive Integration Test Suite
+
+The project includes an in-process integration test suite covering 39 critical scenarios:
 ```bash
-# Terminal 1: Backend API Server (Port 5000 with tsx hot reload)
-npm run dev:server
-
-# Terminal 2: Frontend Vite App (Port 5173 with instant HMR)
-npm run dev:client
+npm test
 ```
 
-Open your browser at **[http://localhost:5173](http://localhost:5173)** to access the Admin Dashboard.
+### Verified Test Categories:
+- ✅ **API Health Check**: HTTP 200 with server telemetry.
+- ✅ **Security & Authorization**: 401 Unauthorized for requests lacking valid JWT.
+- ✅ **Admin Login**: 401 on invalid passwords, 200 with signed JWT on valid credentials.
+- ✅ **6-Field Validation**: Rejects missing photos (`PHOTO_REQUIRED`), missing positions, invalid emails, and out-of-range phone numbers.
+- ✅ **Player Registration**: 201 Created with unique `PLR-2026-XXXXXX` and status `PENDING`.
+- ✅ **Duplicate Prevention**: 409 Conflict with `DUPLICATE_EMAIL` and `DUPLICATE_PHONE`.
+- ✅ **Public Status Lookup**: Retrieves masked player data without leaking private contact information; returns 404 for unknown IDs.
+- ✅ **Admin Approval**: Promotes candidate to `APPROVED` and adds to the auction draft pool.
+- ✅ **Admin Rejection**: Records reason and updates public status to `REJECTED`.
+- ✅ **Admin Statistics**: Live summary counts and position breakdown.
 
 ---
 
-### 5. Production Build & Verification
+## 📁 Repository Structure
 
-To verify full TypeScript compilation and create optimized distribution bundles:
-
-```bash
-npm run build
+```
+football-league-management-system/
+├── package.json                 # Concurrently orchestrates server, admin & player portal
+├── README.md                    # System documentation
+│
+├── server/                      # Shared Express API (Port 5000)
+│   ├── .env                     # Server environment & Cloudinary config
+│   ├── .env.example
+│   ├── src/
+│   │   ├── config/              # DB & Cloudinary configuration
+│   │   ├── controllers/         # Auth, Player, Dashboard & Health controllers
+│   │   ├── middleware/          # JWT auth, Multer upload & Central error handler
+│   │   ├── models/              # Player & Admin Mongoose models
+│   │   ├── routes/              # Modular API routes (/api/auth, /api/players, etc.)
+│   │   ├── services/            # Dual-mode repository (MongoDB + in-memory fallback)
+│   │   ├── test_runner.ts       # 39-step automated test suite
+│   │   ├── app.ts               # Express application builder
+│   │   └── server.ts            # Server entrypoint
+│   └── uploads/players/         # Local disk storage for player photos (fallback)
+│
+├── player-registration/         # Public Player Portal (Port 5174)
+│   ├── vite.config.ts           # Reverse proxy to port 5000 (/api & /uploads)
+│   └── src/
+│       ├── components/
+│       │   ├── Header.tsx       # Logo, tournament title & live status indicator
+│       │   ├── HeroSection.tsx  # Call to action & registration countdown
+│       │   ├── InstructionsCard.tsx # 6 required field guidelines & photo requirements
+│       │   ├── RegistrationForm.tsx # 6-field form with photo preview & validation
+│       │   ├── SuccessView.tsx  # Confirmation screen with Registration ID copy tool
+│       │   ├── StatusChecker.tsx# Public status tracker
+│       │   └── Footer.tsx
+│       ├── App.tsx
+│       └── main.tsx
+│
+└── admin-dashboard/             # Private Management Console (Port 5173)
+    ├── vite.config.ts           # Reverse proxy to port 5000
+    └── src/
+        ├── components/          # Reusable UI cards, tables, badges, and modals
+        ├── pages/
+        │   ├── RegistrationsPage.tsx # Review, search, filter, approve & reject players
+        │   ├── DashboardPage.tsx     # Executive analytics
+        │   └── PlayersPage.tsx       # Tournament player pool
+        ├── services/            # Typed playerService, authService & api client
+        ├── App.tsx
+        └── main.tsx
 ```
 
-This compiles:
-1. `server/dist/`: TypeScript compiled Node.js server.
-2. `client/dist/`: Minified React production bundle with code splitting.
-
 ---
 
-## 📡 API Endpoints Reference
+## ☁️ Cloudinary Configuration
 
-| Method | Endpoint | Description |
-| :--- | :--- | :--- |
-| `GET` | `/` | API status and root routing manifest |
-| `GET` | `/api/health` | Comprehensive system health, MongoDB status, uptime, and memory |
-| `GET` | `/api/dashboard/overview` | Core statistics, position distribution, trends, and recent activity |
-
-### Sample Health Check Response (`GET /api/health`):
-```json
-{
-  "success": true,
-  "message": "API health check passed",
-  "data": {
-    "status": "ok",
-    "service": "Football League & Auction API",
-    "version": "1.0.0 (Phase 1)",
-    "timestamp": "2026-11-18T07:21:35.562Z",
-    "uptimeSeconds": 12,
-    "database": {
-      "status": "connected",
-      "connected": true
-    },
-    "system": {
-      "nodeVersion": "v20.x",
-      "platform": "win32",
-      "memory": {
-        "heapUsedMB": 24.27,
-        "heapTotalMB": 34.59
-      }
-    }
-  }
-}
+To stream player photos directly to Cloudinary CDN, update `server/.env`:
+```env
+CLOUDINARY_CLOUD_NAME=your_cloud_name
+CLOUDINARY_API_KEY=your_api_key
+CLOUDINARY_API_SECRET=your_api_secret
 ```
 
----
-
-## 🎯 Phase 1 Deliverables Summary
-
-- [x] **Backend Architecture**: Express + TypeScript with modular routes, controllers, services, Mongoose models, and central error handling.
-- [x] **MongoDB Integration**: Robust connection handling with auto-recovery and fallback to demo mode.
-- [x] **Working Health Check**: Verified `/api/health` reporting live database telemetry and uptime.
-- [x] **Frontend Architecture**: React 18 + Vite + TypeScript with strict typing.
-- [x] **Dark Football Interface**: Polished UI with custom pitch grids, emerald/neon accents, and responsive layout.
-- [x] **Responsive Sidebar**: Collapsible desktop sidebar with category dividers and full mobile drawer.
-- [x] **11 Admin Dashboard Sections**: Working views for Dashboard, Players, Registrations, Teams, Live Auction, Team Squads, Poster Generator, Fixtures, Match Results, Points Table, and Settings.
-- [x] **Overview Metrics**: Total registered players, approved players, pending registrations, total teams, players sold, and players remaining.
-- [x] **Interactive Components**: Functional filters, search, modal inspection, and graphic generator.
-- [x] **Documentation**: Full setup and installation instructions.
+> **Note**: If Cloudinary credentials are not configured, the system automatically uses secure local disk storage in `server/uploads/players/` and serves photos statically via `/uploads/players/`. Zero setup required for local development.
 
 ---
 
-## 🔮 Next: Phase 2 Roadmap
-- Real-time WebSocket live auction room (`Socket.io`).
-- Auctioneer gavel controls and bid countdown clock.
-- Real-time squad purse budget deduction and roster slot validation.
-- Player registration portal with document uploads and public submission form.
+## 🔮 Roadmap: Upcoming Phase 3
+- **Live Player Auction Engine**: WebSocket real-time bidding room.
+- **Franchise Purse Caps**: Automated purse deduction and bid timer controls.
+- **Roster Allocation**: Automatic team squad assignment upon auction gavel.

@@ -1,52 +1,26 @@
-import express, { Application } from 'express';
-import cors from 'cors';
-import helmet from 'helmet';
-import morgan from 'morgan';
+import app from './app';
 import { config } from './config/env';
 import { connectDatabase } from './config/db';
 import { logger } from './utils/logger';
-import apiRoutes from './routes';
-import { notFoundHandler } from './middleware/notFound';
-import { errorHandler } from './middleware/errorHandler';
+import { Admin } from './models/Admin';
 
-const app: Application = express();
-
-// Security and utility middleware
-app.use(helmet());
-app.use(
-  cors({
-    origin: [config.clientUrl, 'http://localhost:5173', 'http://127.0.0.1:5173'],
-    credentials: true,
-  })
-);
-app.use(morgan(config.nodeEnv === 'development' ? 'dev' : 'combined'));
-app.use(express.json({ limit: '10mb' }));
-app.use(express.urlencoded({ extended: true, limit: '10mb' }));
-
-// Root welcome & API health check aliases
-app.get('/', (_req, res) => {
-  res.json({
-    name: 'Football League & Auction API',
-    phase: 'Phase 1 - Project Setup',
-    status: 'online',
-    endpoints: {
-      health: '/api/health',
-      dashboardOverview: '/api/dashboard/overview',
-    },
-  });
-});
-
-// Direct health alias
-app.get('/health', (_req, res) => {
-  res.redirect('/api/health');
-});
-
-// Mount modular API routes
-app.use('/api', apiRoutes);
-
-// Catch-all 404 & Centralized Error Handler
-app.use(notFoundHandler);
-app.use(errorHandler);
+// Helper to seed initial admin
+const seedInitialAdmin = async () => {
+  try {
+    const adminCount = await Admin.countDocuments();
+    if (adminCount === 0) {
+      await Admin.create({
+        name: config.adminName,
+        email: config.adminEmail.toLowerCase(),
+        password: config.adminPassword,
+        role: 'superadmin',
+      });
+      logger.info(`👑 Default admin initialized: ${config.adminEmail}`);
+    }
+  } catch (err: any) {
+    logger.warn('Initial admin check deferred:', err?.message || err);
+  }
+};
 
 // Bootstrap Server
 const startServer = async () => {
@@ -55,13 +29,19 @@ const startServer = async () => {
       logger.info(`⚽ Football League Management Server is running on port ${config.port}`);
       logger.info(`🚀 API Base URL: http://localhost:${config.port}/api`);
       logger.info(`🩺 Health Check: http://localhost:${config.port}/api/health`);
-      logger.info(`📊 Dashboard Stats: http://localhost:${config.port}/api/dashboard/overview`);
+      logger.info(`📝 Player Registration Endpoint: http://localhost:${config.port}/api/players/register`);
     });
 
-    // Connect to database (with standalone fallback)
-    connectDatabase().catch((err) => {
-      logger.warn('MongoDB connection attempt caught:', err);
-    });
+    // Connect to database in background
+    connectDatabase()
+      .then((connected) => {
+        if (connected) {
+          seedInitialAdmin();
+        }
+      })
+      .catch((err) => {
+        logger.warn('MongoDB connection attempt caught:', err);
+      });
 
     const shutdown = () => {
       logger.info('Shutting down server gracefully...');
