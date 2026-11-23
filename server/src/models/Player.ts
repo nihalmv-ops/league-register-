@@ -27,6 +27,7 @@ export interface IPlayer extends Document {
   teamName?: string;
   overallRating?: number;
   jerseyNumber?: number;
+  isCaptain?: boolean;
 
   createdAt: Date;
   updatedAt: Date;
@@ -143,6 +144,10 @@ const PlayerSchema = new Schema<IPlayer>(
     jerseyNumber: {
       type: Number,
       default: null,
+    },
+    isCaptain: {
+      type: Boolean,
+      default: false,
     },
   },
   {

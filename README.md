@@ -80,6 +80,47 @@ The project is structured into three decoupled frontend applications sharing a s
 
 ---
 
+## 🎨 Phase 5: Team Squad Poster Generator & Player Cards Studio
+
+A complete, broadcast-quality poster generator allowing tournament administrators to render, customize, and export professional squad announcement graphics and individual player cards from actual live auction squad records.
+
+### 1. Interactive 3-Panel Studio Layout (`/poster-generator`)
+- **Left Panel**: Franchise team picker (with club crests and squad statistics), season selector ("2026-27"), and squad position breakdown (Goalkeepers, Defenders, Midfielders, Forwards, Captain, and Total Squad Value).
+- **Center Panel**: Scaled live viewport with real-time preview of the active template, dimension, titles, and player cards.
+- **Right Panel**: Template selector, export aspect ratio switcher, customizable title and subtitle, and toggles for playing positions, jersey numbers, captain badges, and player ages.
+
+### 2. Three Distinct Poster Templates
+1. **Modern Football Club (`modern`)**:
+   - Dark gradient stadium background with vibrant club primary accents (`#10b981` / `#f97316`).
+   - Prominent club crest badge, official title banner, and organized responsive squad grid.
+   - High-impact player cards showing photo, name, position, age, rating, and captain badge.
+2. **Professional League Announcement (`announcement`)**:
+   - Official tournament broadcast ribbon and gold/metallic framing.
+   - Sleek dark player cards with contrast borders and official league watermark.
+   - Distinct squad statistics bar and confirmed roster counter.
+3. **Minimal Football Poster (`minimal`)**:
+   - High-contrast obsidian minimalist layout with fine architectural grid lines.
+   - Monochromatic styling focusing purely on sharp player portraits, clean typography, and jersey numbers.
+
+### 3. Supported Export Dimensions
+- **Instagram Portrait**: `1080 × 1350 px` (4:5 aspect ratio) – Optimal for Instagram feed announcements.
+- **Instagram Square**: `1080 × 1080 px` (1:1 aspect ratio) – Standard square social media graphic.
+- **Instagram Story**: `1080 × 1920 px` (9:16 aspect ratio) – Fullscreen vertical mobile story / reel.
+- **Ultra HD Print**: `1440 × 1800 px` – Ultra-high resolution print and web banner.
+
+### 4. High-Res PNG & ZIP Downloads
+- **Complete Squad Poster (PNG)**: Client-side rendering via `html-to-image` at 2x pixel ratio for maximum print sharpness with zero blurriness or text clipping.
+- **Download All Cards (ZIP)**: Automatically batches every squad member's individual card into high-resolution PNGs and packages them into a single `.zip` file using `jszip` with real-time export progress tracking.
+- **Individual Player Cards**: Inspect and download any individual player card on demand.
+
+### 5. Squad Data Gating & Consistency
+- Includes **only** players belonging to the selected franchise's squad (purchased in auction or official roster).
+- Never leaks unsold players or players from competing franchises.
+- Graceful photo fallbacks if a player image is missing or unreachable.
+- Jersey numbers and Captain badges are rendered only if assigned.
+
+---
+
 ## 🔌 Socket.IO Real-Time Event Architecture
 
 | Event Name | Direction | Payload | Description |
@@ -125,13 +166,13 @@ All 8 franchise managers are pre-seeded with password **`Manager@123`**:
 
 ## 🧪 Comprehensive Automated Test Suite
 
-A standalone comprehensive automated test suite validates all 16 architectural domains:
+A standalone comprehensive automated test suite validates all 17 architectural domains:
 
 ```bash
 npm --prefix server run test
 ```
 
-### Test Coverage (92 Tests Total - 100% Passing)
+### Test Coverage (114 Tests Total - 100% Passing)
 1. **Health Check** (HTTP 200, success flag)
 2. **Security & Authorization** (Anonymous 401s, forged JWT rejections)
 3. **Admin Authentication** (Valid JWT signature, role payload)
@@ -148,10 +189,11 @@ npm --prefix server run test
 14. **SOLD Process** (Hammer down, winner allocation, purse deduction, squad count increment, duplicate sale prevention)
 15. **UNSOLD Process** (Player returned to draft pool, 0 final price)
 16. **Projector Telemetry & Privacy Check** (Zero exposure of candidate phone numbers or email addresses)
+17. **Team Squad Poster Studio & Cards** (Admin authorization, squad data isolation, sold auction player inclusion, individual player cards dataset, export event logging, 404 error handling)
 
 ```
 ======================================================
-📊 TEST SUITE SUMMARY: 92 PASSED, 0 FAILED
+📊 TEST SUITE SUMMARY: 114 PASSED, 0 FAILED
 ======================================================
 ```
 

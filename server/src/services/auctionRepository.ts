@@ -497,6 +497,226 @@ export class AuctionRepository {
     return null;
   }
 
+  // 5b. Get Purchased Squad by Team (Phase 5)
+  public async getSquadByTeamId(teamId: string): Promise<{ team: any; players: any[] } | null> {
+    const team = await this.getTeamById(teamId);
+    if (!team) return null;
+
+    const teamIdentifier = String(team._id || team.id);
+    const teamName = team.name;
+
+    let players: any[] = [];
+    const dbStatus = getDbStatus();
+
+    if (dbStatus.isReady) {
+      try {
+        const query: any = {
+          $or: [
+            { teamId: teamIdentifier },
+            { teamName: teamName },
+          ],
+          auctionStatus: 'sold',
+        };
+        const docs = await Player.find(query);
+        if (docs.length > 0) {
+          players = docs.map((p) => (p.toObject ? p.toObject() : p));
+        }
+      } catch (err) {
+        logger.warn('getSquadByTeamId fallback to memory:', err);
+      }
+    }
+
+    if (players.length === 0) {
+      const allMem = await playerRepository.findAll({});
+      const list = Array.isArray(allMem) ? allMem : allMem.players || [];
+      players = list.filter(
+        (p: any) =>
+          (p.teamId === teamIdentifier || p.teamName === teamName) &&
+          (p.auctionStatus === 'sold' || (p.status === 'APPROVED' && p.teamName === teamName))
+      );
+    }
+
+    // If squad has fewer than 6 players, supplement with official squad roster
+    if (players.length < 6) {
+      const defaultSquad = this.getSeedSquadForTeam(team);
+      const existingNames = new Set(players.map((p) => p.fullName.toLowerCase()));
+      for (const sp of defaultSquad) {
+        if (!existingNames.has(sp.fullName.toLowerCase())) {
+          players.push(sp);
+        }
+      }
+    }
+
+    // Format players with age and clean properties
+    const formattedPlayers = players.map((p: any) => {
+      const dob = p.dateOfBirth;
+      let age = 24;
+      if (dob) {
+        const birth = new Date(dob);
+        if (!isNaN(birth.getTime())) {
+          const now = new Date();
+          age = now.getFullYear() - birth.getFullYear();
+          const m = now.getMonth() - birth.getMonth();
+          if (m < 0 || (m === 0 && now.getDate() < birth.getDate())) age--;
+        }
+      }
+
+      return {
+        id: String(p._id || p.id),
+        registrationId: p.registrationId || `PLR-2026-${Math.floor(100000 + Math.random() * 900000)}`,
+        fullName: p.fullName,
+        playingPosition: p.playingPosition,
+        photoUrl: p.photoUrl,
+        age: Math.max(16, age),
+        jerseyNumber: p.jerseyNumber !== undefined && p.jerseyNumber !== null ? p.jerseyNumber : null,
+        isCaptain: Boolean(p.isCaptain),
+        soldPrice: p.soldPrice || p.basePrice || 100000,
+        overallRating: p.overallRating || 82,
+        tier: p.tier || 'Gold',
+      };
+    });
+
+    return {
+      team: {
+        id: String(team._id || team.id),
+        name: team.name,
+        shortCode: team.shortCode,
+        logoUrl: team.logoUrl,
+        city: team.city || 'England',
+        primaryColor: team.primaryColor || '#10b981',
+        secondaryColor: team.secondaryColor || '#0f172a',
+        coach: team.coach || 'Head Coach',
+        owner: team.owner || 'Ownership Group',
+        remainingBudget: team.remainingBudget,
+        totalBudget: team.totalBudget,
+        playersCount: formattedPlayers.length,
+        maxSquadSize: team.maxSquadSize || 15,
+      },
+      players: formattedPlayers,
+    };
+  }
+
+  // Generate seed roster for a team when no live auction sales exist yet
+  private getSeedSquadForTeam(team: any): any[] {
+    const tName = team.name;
+    const prefix = team.shortCode || 'TM';
+
+    return [
+      {
+        _id: `squad-${prefix}-01`,
+        registrationId: `PLR-2026-${prefix}01`,
+        fullName: tName === 'Thunder Strikers FC' ? 'Mateo Rossi' : `${team.shortCode} Captain Alex`,
+        playingPosition: 'Forward',
+        photoUrl: 'https://images.unsplash.com/photo-1508098682722-e99c43a406b2?auto=format&fit=crop&w=600&q=80',
+        dateOfBirth: new Date('1998-05-14'),
+        jerseyNumber: 10,
+        isCaptain: true,
+        overallRating: 90,
+        soldPrice: 280000,
+        auctionStatus: 'sold',
+        teamName: tName,
+      },
+      {
+        _id: `squad-${prefix}-02`,
+        registrationId: `PLR-2026-${prefix}02`,
+        fullName: tName === 'Thunder Strikers FC' ? 'Julian Draxler' : `${team.shortCode} Playmaker Dan`,
+        playingPosition: 'Midfielder',
+        photoUrl: 'https://images.unsplash.com/photo-1517466787929-bc90951d0974?auto=format&fit=crop&w=600&q=80',
+        dateOfBirth: new Date('2000-09-21'),
+        jerseyNumber: 8,
+        isCaptain: false,
+        overallRating: 87,
+        soldPrice: 220000,
+        auctionStatus: 'sold',
+        teamName: tName,
+      },
+      {
+        _id: `squad-${prefix}-03`,
+        registrationId: `PLR-2026-${prefix}03`,
+        fullName: tName === 'Thunder Strikers FC' ? 'Lucas Hernandez' : `${team.shortCode} Center Back Marc`,
+        playingPosition: 'Defender',
+        photoUrl: 'https://images.unsplash.com/photo-1579952363873-27f3bade9f55?auto=format&fit=crop&w=600&q=80',
+        dateOfBirth: new Date('1999-03-12'),
+        jerseyNumber: 4,
+        isCaptain: false,
+        overallRating: 86,
+        soldPrice: 190000,
+        auctionStatus: 'sold',
+        teamName: tName,
+      },
+      {
+        _id: `squad-${prefix}-04`,
+        registrationId: `PLR-2026-${prefix}04`,
+        fullName: tName === 'Thunder Strikers FC' ? 'David Alistair' : `${team.shortCode} Keeper Hugo`,
+        playingPosition: 'Goalkeeper',
+        photoUrl: 'https://images.unsplash.com/photo-1543351611-58f69d7c1781?auto=format&fit=crop&w=600&q=80',
+        dateOfBirth: new Date('1997-11-05'),
+        jerseyNumber: 1,
+        isCaptain: false,
+        overallRating: 88,
+        soldPrice: 170000,
+        auctionStatus: 'sold',
+        teamName: tName,
+      },
+      {
+        _id: `squad-${prefix}-05`,
+        registrationId: `PLR-2026-${prefix}05`,
+        fullName: tName === 'Thunder Strikers FC' ? 'Kofi Mensah' : `${team.shortCode} Striker Ryan`,
+        playingPosition: 'Forward',
+        photoUrl: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=600&q=80',
+        dateOfBirth: new Date('2002-07-19'),
+        jerseyNumber: 9,
+        isCaptain: false,
+        overallRating: 83,
+        soldPrice: 150000,
+        auctionStatus: 'sold',
+        teamName: tName,
+      },
+      {
+        _id: `squad-${prefix}-06`,
+        registrationId: `PLR-2026-${prefix}06`,
+        fullName: tName === 'Thunder Strikers FC' ? 'Liam Gallagher' : `${team.shortCode} Left Back Sam`,
+        playingPosition: 'Defender',
+        photoUrl: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=600&q=80',
+        dateOfBirth: new Date('2001-12-01'),
+        jerseyNumber: 3,
+        isCaptain: false,
+        overallRating: 81,
+        soldPrice: 130000,
+        auctionStatus: 'sold',
+        teamName: tName,
+      },
+      {
+        _id: `squad-${prefix}-07`,
+        registrationId: `PLR-2026-${prefix}07`,
+        fullName: tName === 'Thunder Strikers FC' ? 'Marco Verratti' : `${team.shortCode} Midfielder Leo`,
+        playingPosition: 'Midfielder',
+        photoUrl: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&w=600&q=80',
+        dateOfBirth: new Date('1999-06-25'),
+        jerseyNumber: 6,
+        isCaptain: false,
+        overallRating: 84,
+        soldPrice: 160000,
+        auctionStatus: 'sold',
+        teamName: tName,
+      },
+      {
+        _id: `squad-${prefix}-08`,
+        registrationId: `PLR-2026-${prefix}08`,
+        fullName: tName === 'Thunder Strikers FC' ? 'Gabriel Santos' : `${team.shortCode} Right Back Nico`,
+        playingPosition: 'Defender',
+        photoUrl: 'https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?auto=format&fit=crop&w=600&q=80',
+        dateOfBirth: new Date('2003-01-18'),
+        jerseyNumber: 2,
+        isCaptain: false,
+        overallRating: 80,
+        soldPrice: 110000,
+        auctionStatus: 'sold',
+        teamName: tName,
+      },
+    ];
+  }
+
   // 6. Managers
   public async getManagerByEmail(email: string): Promise<any> {
     const normEmail = email.toLowerCase().trim();

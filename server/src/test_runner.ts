@@ -621,6 +621,78 @@ async function runTests() {
     assert(!projectorJson.includes('+33 612 345 678'), 'Private phone number is strictly NOT exposed in projector view');
     assert(!projectorJson.includes('kylian.mbappe@league-test.org'), 'Private email address is strictly NOT exposed in projector view');
 
+    // 17. Team Squad Poster Generator Endpoints (Phase 5)
+    console.log('\n--- 17. Phase 5 Team Squad Poster Generator ---');
+
+    // 17a. Security check: unauthenticated requests to poster endpoints rejected
+    const unauthTeamsRes = await callExpress('GET', '/api/admin/teams');
+    assert(unauthTeamsRes.status === 401, 'Unauthorized request to /api/admin/teams returns 401');
+
+    const unauthPosterRes = await callExpress('GET', '/api/admin/teams/team-1/poster-data');
+    assert(unauthPosterRes.status === 401, 'Unauthorized request to /api/admin/teams/:id/poster-data returns 401');
+
+    // 17b. Authenticated admin fetches teams list
+    const adminTeamsRes = await callExpress('GET', '/api/admin/teams', authHeaders);
+    assert(adminTeamsRes.status === 200, 'Admin can retrieve all tournament teams for studio');
+    assert(Array.isArray(adminTeamsRes.data.data), 'Teams response contains array of franchises');
+    assert(adminTeamsRes.data.data.length >= 8, 'Teams response contains all 8 tournament franchises');
+
+    // 17c. Fetch squad poster data for Thunder Strikers FC
+    const thunderPosterRes = await callExpress(
+      'GET',
+      '/api/admin/teams/team-1/poster-data?season=2026-27',
+      authHeaders
+    );
+    assert(thunderPosterRes.status === 200, 'Admin can retrieve squad poster data for Thunder Strikers FC');
+    assert(thunderPosterRes.data.data?.team?.name === 'Thunder Strikers FC', 'Team name matches Thunder Strikers FC');
+    assert(Array.isArray(thunderPosterRes.data.data?.players), 'Poster data contains players array');
+    assert(thunderPosterRes.data.data?.players.length > 0, 'Thunder Strikers squad has players');
+    assert(thunderPosterRes.data.data?.season === '2026-27', 'Season matches 2026-27');
+
+    // Verify Kylian Mbappe (sold to Thunder Strikers in Section 14) is included in squad!
+    const squadPlayers = thunderPosterRes.data.data.players;
+    const mbappeInSquad = squadPlayers.find((p: any) => p.fullName === 'Kylian Mbappe');
+    assert(Boolean(mbappeInSquad), 'Kylian Mbappe (sold in auction) is correctly included in Thunder Strikers squad');
+    assert(typeof mbappeInSquad?.age === 'number' && mbappeInSquad.age > 0, 'Player age is calculated from date of birth');
+    assert(Boolean(mbappeInSquad?.photoUrl), 'Player has valid profile photo URL');
+
+    // 17d. Fetch individual player cards dataset
+    const thunderCardsRes = await callExpress(
+      'GET',
+      '/api/admin/teams/team-1/player-cards?season=2026-27',
+      authHeaders
+    );
+    assert(thunderCardsRes.status === 200, 'Admin can retrieve player cards data');
+    assert(Array.isArray(thunderCardsRes.data.data?.cards), 'Cards response contains array of cards');
+    assert(thunderCardsRes.data.data?.totalCards > 0, 'Total cards count is positive');
+    const firstCard = thunderCardsRes.data.data.cards[0];
+    assert(Boolean(firstCard.fullName), 'Card contains player full name');
+    assert(Boolean(firstCard.teamName), 'Card contains franchise team name');
+    assert(Boolean(firstCard.playingPosition), 'Card contains playing position');
+
+    // 17e. Log poster export activity
+    const exportLogRes = await callExpress(
+      'POST',
+      '/api/admin/teams/team-1/poster-export',
+      { ...authHeaders, 'content-type': 'application/json' },
+      JSON.stringify({
+        template: 'modern',
+        format: 'PNG',
+        dimensions: '1080x1350',
+        count: 1,
+      })
+    );
+    assert(exportLogRes.status === 200, 'Admin can log poster export event');
+    assert(Boolean(exportLogRes.data.data?.exportId), 'Export event generates export tracking ID');
+
+    // 17f. Nonexistent team handling
+    const nonExistentTeamRes = await callExpress(
+      'GET',
+      '/api/admin/teams/non-existent-team-999/poster-data',
+      authHeaders
+    );
+    assert(nonExistentTeamRes.status === 404, 'Poster data for non-existent team returns 404 Not Found');
+
     console.log('\n======================================================');
     console.log(`📊 TEST SUITE SUMMARY: ${passedCount} PASSED, ${failedCount} FAILED`);
     console.log('======================================================\n');

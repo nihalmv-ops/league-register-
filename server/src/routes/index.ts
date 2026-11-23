@@ -4,6 +4,7 @@ import dashboardRoutes from './dashboard.routes';
 import authRoutes from './auth.routes';
 import playerRoutes from './player.routes';
 import auctionRoutes from './auction.routes';
+import posterRoutes from './poster.routes';
 
 const router = Router();
 
@@ -13,5 +14,6 @@ router.use('/auth', authRoutes);
 router.use('/players', playerRoutes);
 router.use('/dashboard', dashboardRoutes);
 router.use('/', auctionRoutes);
+router.use('/admin', posterRoutes);
 
 export default router;

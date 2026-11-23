@@ -21,6 +21,11 @@ export interface PlayerRecord {
   basePrice?: number;
   overallRating?: number;
   tier?: string;
+  teamId?: string;
+  teamName?: string;
+  jerseyNumber?: number;
+  isCaptain?: boolean;
+  soldPrice?: number;
   createdAt: Date;
   updatedAt: Date;
 }
