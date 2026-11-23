@@ -1,12 +1,12 @@
 # ⚽ Football League Management & Live Player Auction System
 
-A professional, full-stack **MERN + TypeScript** platform for tournament management, franchise roster building, public player applications, and live player auctions.
+A professional, full-stack **MERN + TypeScript** platform for tournament management, franchise roster building, public player applications, and live player auctions with real-time Socket.IO synchronization.
 
 ---
 
 ## 🏛️ System Architecture
 
-The project is structured into three decoupled applications sharing a single Node.js/Express backend and MongoDB database:
+The project is structured into three decoupled frontend applications sharing a single Node.js/Express backend and MongoDB database with real-time bidirectional WebSocket events:
 
 ```
                                       ┌──────────────────────────────────────────────┐
@@ -16,60 +16,144 @@ The project is structured into three decoupled applications sharing a single Nod
                                                              │
 ┌──────────────────────────────┐              ┌──────────────┴──────────────┐              ┌──────────────────────────────┐
 │  player-registration (5174)  │              │        server (5000)        │              │    admin-dashboard (5173)    │
-│   Public Candidate Portal    │ ── POST ───► │  Shared Express RESTful API │ ◄── GET/PATCH│   Private Management Console │
-│  - 6 Mandatory Fields Form   │              │  - JWT & Role Authentication│              │  - Review Player Applications│
-│  - Photo Upload & Preview    │ ◄── Status ──│  - Duplicate Prevention     │              │  - Approve / Reject Workflow │
-│  - Status Tracking by ID     │              │  - Cloudinary / Local Store │              │  - Auction Pool Gating       │
+│   Public Candidate Portal    │ ── POST ───► │  Shared Express REST + WS   │ ◄── WS/REST ─│   Private Management Console │
+│  - 6 Mandatory Fields Form   │              │  - Socket.IO Real-Time Floor│              │  - Executive Auction Deck    │
+│  - Photo Upload & Preview    │ ◄── Status ──│  - Server-Authoritative Cloc│              │  - Review Player Applications│
+│  - Status Tracking by ID     │              │  - Atomic Squad Deductions  │              │  - Approve / Reject Workflow │
 └──────────────────────────────┘              └──────────────┬──────────────┘              └──────────────────────────────┘
                                                              │
-                                              ┌──────────────┴──────────────┐
-                                              │    MongoDB Database / Mem   │
-                                              │  - Players & Registrations  │
-                                              │  - Admins & Tournament Data │
-                                              └─────────────────────────────┘
+                                        ┌────────────────────┼────────────────────┐
+                                        │                                         │
+                         ┌──────────────┴──────────────┐           ┌──────────────┴──────────────┐
+                         │   projector-screen (5173)   │           │   manager-portal (5173)     │
+                         │   /auction/live/:auctionId  │           │      /auction/manager       │
+                         │ - Big Screen Stadium View   │           │ - 8 Franchise Logins        │
+                         │ - Real-Time Highest Bid     │           │ - Real-time +$10k-$100k Bids│
+                         │ - Zero Private Data Leakage │           │ - Squad & Budget Constraints│
+                         └─────────────────────────────┘           └─────────────────────────────┘
 ```
 
-| Application | Port | Description | Tech Stack |
+| Application / Route | Port | Description | Tech Stack |
 | :--- | :--- | :--- | :--- |
-| **`server`** | `5000` | Shared backend REST API, auth & storage | Node.js, Express, TypeScript, Mongoose, Multer, Zod, JWT |
-| **`admin-dashboard`** | `5173` | Private tournament management console | React 18, TypeScript, Vite, Tailwind CSS, Lucide React |
-| **`player-registration`**| `5174` | Public player application & status portal | React 18, TypeScript, Vite, Tailwind CSS, Lucide React |
+| **`server`** | `5000` | Shared backend REST API + Socket.IO real-time engine | Node.js, Express, TypeScript, Mongoose, Socket.IO, JWT, Multer |
+| **`admin-dashboard`** (`/auction`) | `5173` | Executive Live Auction Control Room | React 18, TypeScript, Vite, Tailwind CSS, Lucide React, Socket.IO |
+| **`projector-screen`** (`/auction/projector`) | `5173` | Full-screen stadium display for projectors and big monitors | React 18, TypeScript, Vite, Tailwind CSS, Socket.IO |
+| **`manager-portal`** (`/auction/manager`) | `5173` | Franchise manager real-time bidding console | React 18, TypeScript, Vite, Tailwind CSS, Socket.IO |
+| **`player-registration`** | `5174` | Public candidate registration & application status | React 18, TypeScript, Vite, Tailwind CSS, Lucide React |
 
 ---
 
-## 🚀 Phase 2 Features: Player Registration & Admin Integration
+## ⚡ Phase 4: Live Player Auction System (Real-Time Socket.IO)
 
-### A. Public Player Registration Website (`http://localhost:5174`)
-- **Pitch-Dark Football Theme**: Dark background (`#080c14`), pitch grass accents (`#10b981`), glowing badges, and responsive design for mobile & desktop.
-- **Strict 6-Field Registration Form**:
-  1. `fullName`: Candidate's full name (min 2 chars, letters and common symbols).
-  2. `dateOfBirth`: Validated for tournament eligibility (ages 12 to 60).
-  3. `phoneNumber`: E.164 international format validation (7 to 15 digits).
-  4. `email`: Unique email validation.
-  5. `playingPosition`: Mandatory selection: `Goalkeeper`, `Defender`, `Midfielder`, or `Forward`.
-  6. `photo`: Secure file upload (JPG/JPEG/PNG, up to 5MB) with instant live preview and replacement before submission.
-- **Automated Registration ID**: Generates an official `PLR-2026-XXXXXX` unique identifier.
-- **Duplicate Prevention**: Email and phone number are indexed and verified before creation (returns `409 Conflict`).
-- **Application Status Checker**: Public lookup tool allows players to check status by Registration ID or email. Candidate names are masked (`John D***`) to protect privacy.
+### 1. Admin Auction Control Deck (`/auction`)
+- **Arbitration Controls**: Start, pause, and resume auction sessions in real-time.
+- **Draft Queue Management**: Dynamically bring approved players from the candidate draft queue onto the podium.
+- **Base Price & Timer Config**: Configurable opening base price and countdown duration (default 30 seconds).
+- **Hammer Actions**:
+  - **DECLARE SOLD**: Atomically allocates player to the winning franchise, deducts the final hammer price from the team's remaining budget, increments squad count, and broadcasts the celebration banner to all connected screens.
+  - **DECLARE UNSOLD**: Returns the unbid candidate to the unsold pool for future draft rounds.
+- **Live Ledger**: Real-time record of all sold and unsold transactions with final prices and timestamps.
 
-### B. Admin Dashboard Integration (`http://localhost:5173/registrations`)
-- **Admin JWT Authentication**: Protected admin routes with token expiration and role checking.
-- **Comprehensive Candidate View**: Inspect all 6 submitted fields, high-resolution photo thumbnails, submission timestamps, and status badges.
-- **Search & Filtering**: Real-time filtering by playing position (`Goalkeeper`, `Defender`, `Midfielder`, `Forward`) and status (`PENDING`, `APPROVED`, `REJECTED`), plus full-text search across name, email, phone, and registration ID.
-- **Approve Workflow**: Approving an application assigns the player to the **Upcoming Auction Pool** with an initial base price.
-- **Reject Workflow**: Rejection prompt records official reason (e.g., medical criteria, documentation) and informs the player via the status checker.
-- **Auction Pool Enforcement**: Only **APPROVED** players are eligible for the upcoming live auction.
+### 2. Projector Live Auction Screen (`/auction/projector` or `/auction/live/:auctionId`)
+- **Stadium Display Optimized**: Designed for projection on large monitors and auditorium screens.
+- **Full-Screen Cinema Mode**: Integrated full-screen toggle via Fullscreen API.
+- **Live Telemetry Display**:
+  - High-resolution player photo and playing position badge.
+  - Player name, age (calculated from date of birth), and registration ID.
+  - Giant current highest bid with glowing typography.
+  - Leading team logo, franchise name, and short code.
+  - Server-synchronized countdown clock (turns amber at 10s, pulsing red at 5s).
+  - High-impact animated overlays for **SOLD!** and **UNSOLD**.
+- **Privacy Enforcement**: Strictly zero private player contact information (phone number and email address are never transmitted to this route).
+
+### 3. Team Manager Bidding Dashboard (`/auction/manager`)
+- **Franchise Authentication**: Secure JWT login mapped specifically to the manager's assigned team.
+- **Quick Franchise Switcher**: 1-click test login for all 8 tournament franchises for demoing.
+- **Live Franchise Telemetry**:
+  - Current remaining budget and budget utilization progress bar.
+  - Squad slot capacity (`playersCount` / `maxSquadSize`).
+- **Interactive Bidding Floor**:
+  - One-click quick increment buttons: `+ $10,000`, `+ $25,000`, `+ $50,000`, `+ $100,000`.
+  - Custom bid input with minimum required bid hints.
+  - Real-time bid acceptance and rejection toast notifications.
+  - Server-side guardrails: automatically blocks bids exceeding remaining budget, bids when squad is full (18 players), or bids placed after the timer has expired.
 
 ---
 
-## 🔐 Default Admin Credentials
+## 🔌 Socket.IO Real-Time Event Architecture
 
-Default credentials seeded on initialization:
+| Event Name | Direction | Payload | Description |
+| :--- | :--- | :--- | :--- |
+| `join:auction` | Client ➔ Server | `{ auctionId }` | Subscribes socket to room `auction:<id>` and emits current state |
+| `leave:auction`| Client ➔ Server | `{ auctionId }` | Unsubscribes socket from auction room |
+| `bid:place` | Client ➔ Server | `{ auctionId, amount, token }` | Team manager submits a bid with JWT authorization |
+| `auction:state`| Server ➔ Client | `AuctionStatePayload` | Full snapshot of lot, leader, bids, and franchise purses |
+| `bid:placed` | Server ➔ Broadcast | `{ bid, currentHighestBid, leadingTeam, remainingSeconds }` | Broadcasted on valid bid; auto-resets server countdown |
+| `bid:accepted`| Server ➔ Client | `{ message, bid }` | Direct acknowledgment to the bidding manager |
+| `bid:rejected`| Server ➔ Client | `{ message }` | Direct error reason to bidding manager (e.g. low bid, over budget) |
+| `timer:tick` | Server ➔ Broadcast | `{ auctionId, remainingSeconds, endsAt }` | 1-second interval broadcast of server-authoritative timer |
+| `timer:ended`| Server ➔ Broadcast | `{ auctionId, message }` | Broadcasted when timer reaches zero; freezes bidding floor |
+| `player:next` | Server ➔ Broadcast | `{ player, basePrice, lotNumber }` | Broadcasted when admin brings new player to podium |
+| `player:sold` | Server ➔ Broadcast | `{ result, winningTeamName, finalPrice }` | Broadcasted on SOLD; triggers celebration animations |
+| `player:unsold`| Server ➔ Broadcast| `{ result, player }` | Broadcasted on UNSOLD lot |
+| `auction:paused`| Server ➔ Broadcast| `{ auctionId }` | Halts timer and disables bidding floor |
+| `auction:resumed`| Server ➔ Broadcast| `{ auctionId }` | Re-enables floor |
+
+---
+
+## 🔐 Franchise Team Accounts & Default Credentials
+
+All 8 franchise managers are pre-seeded with password **`Manager@123`**:
+
+| Franchise Team | Short Code | Manager Name | Login Email | Initial Purse |
+| :--- | :--- | :--- | :--- | :--- |
+| **Thunder Strikers FC** | `THU` | Erik Veldman | `manager.thunder@football.league` | $1,500,000 |
+| **Apex Predators** | `APX` | Carlos Moretti | `manager.apex@football.league` | $1,500,000 |
+| **Iron Titans FC** | `TIT` | Marcus Vance | `manager.titans@football.league` | $1,500,000 |
+| **Solar Flare SC** | `SOL` | Tariq Al-Mansoor | `manager.solar@football.league` | $1,500,000 |
+| **Coastal Surge FC** | `CSG` | Lucas Marin | `manager.coastal@football.league` | $1,500,000 |
+| **Highland Wolves** | `HLW` | Callum MacLeod | `manager.wolves@football.league` | $1,500,000 |
+| **Metro Dynamos** | `MET` | Andre Santos | `manager.metro@football.league` | $1,500,000 |
+| **Oasis Wanderers** | `OAS` | Youssef Benali | `manager.oasis@football.league` | $1,500,000 |
+
+### Commissioner / Admin Account
 - **Email**: `admin@football.league`
 - **Password**: `Admin@123456`
 - **Role**: `superadmin`
 
-> Admin tokens are cryptographically signed using `JWT_SECRET` in `server/.env`.
+---
+
+## 🧪 Comprehensive Automated Test Suite
+
+A standalone comprehensive automated test suite validates all 16 architectural domains:
+
+```bash
+npm --prefix server run test
+```
+
+### Test Coverage (92 Tests Total - 100% Passing)
+1. **Health Check** (HTTP 200, success flag)
+2. **Security & Authorization** (Anonymous 401s, forged JWT rejections)
+3. **Admin Authentication** (Valid JWT signature, role payload)
+4. **Player Registration Validations** (Missing photo, missing position, invalid email format)
+5. **Successful Registrations** (Standard candidate, optional email test, unique `PLR-2026-XXXXXX` ID)
+6. **Duplicate Prevention** (Duplicate email 409, duplicate phone 409)
+7. **Public Application Status Check** (Masked privacy names, 404 nonexistent IDs)
+8. **Admin Approval & Rejection Workflow** (Status transitions, auction pool assignment, rejection reasons)
+9. **Admin Statistics Engine** (Position breakdown, approval rates)
+10. **Auction Session Control Deck** (Start, pause, resume lifecycle)
+11. **Podium Sequencing** (Eligible approved gating, base price initialization)
+12. **Team Manager Authentication & Role Separation** (Manager logins, token scoping, admin forbidden from bidding)
+13. **Real-time Bidding Engine & Validations** (Sub-base price rejections, outbidding, purse limit ceiling rejections)
+14. **SOLD Process** (Hammer down, winner allocation, purse deduction, squad count increment, duplicate sale prevention)
+15. **UNSOLD Process** (Player returned to draft pool, 0 final price)
+16. **Projector Telemetry & Privacy Check** (Zero exposure of candidate phone numbers or email addresses)
+
+```
+======================================================
+📊 TEST SUITE SUMMARY: 92 PASSED, 0 FAILED
+======================================================
+```
 
 ---
 
@@ -78,113 +162,48 @@ Default credentials seeded on initialization:
 ### 1. Prerequisites
 - **Node.js** v18+ (tested on Node v20/v24)
 - **npm** v9+
-- *(Optional)* **MongoDB** running locally on `mongodb://127.0.0.1:27017` or MongoDB Atlas URI (if MongoDB is offline, the backend seamlessly runs with an in-memory repository).
+- *(Optional)* **MongoDB** (the application seamlessly uses an in-memory database fallback if MongoDB is not running locally)
 
 ### 2. Installation
-Install all dependencies across all 3 applications:
 ```bash
-npm run install:all
+# Backend server
+cd server && npm install
+
+# Admin Dashboard
+cd ../admin-dashboard && npm install
+
+# Player Registration Portal
+cd ../player-registration && npm install
 ```
 
-### 3. Start All Applications Concurrently
-Run backend server and both frontends with a single command:
+### 3. Running All Three Applications
+
+Open three terminal windows:
+
 ```bash
+# Terminal 1: Backend Express + Socket.IO Server (Port 5000)
+cd server
+npm run dev
+
+# Terminal 2: Admin Dashboard & Auction Arena (Port 5173)
+cd admin-dashboard
+npm run dev
+
+# Terminal 3: Public Player Registration Portal (Port 5174)
+cd player-registration
 npm run dev
 ```
 
-This starts:
-- 🚀 **Server**: `http://localhost:5000`
-- 🖥️ **Admin Dashboard**: `http://localhost:5173`
-- ⚽ **Player Registration**: `http://localhost:5174`
+### 4. Experience the Live Auction Workflow
+1. **Open Player Registration Portal** (`http://localhost:5174`): Register a player with photo.
+2. **Open Admin Dashboard** (`http://localhost:5173/registrations`): Log in as Admin (`admin@football.league` / `Admin@123456`) and click **Approve Application**.
+3. **Open Projector Screen** (`http://localhost:5173/auction/projector`): Experience the live stadium presentation display.
+4. **Open Manager Portal** (`http://localhost:5173/auction/manager`): Click **Thunder Strikers FC** or **Apex Predators** 1-click login.
+5. **From Admin Auction Deck** (`http://localhost:5173/auction`): Click **Next Player...**, put the approved player on stage, and click **Start Clock (30s)**.
+6. **From Manager Portal**: Place bids (`+$10k`, `+$25k`) — watch the projector screen and admin deck update in real time without refreshing!
+7. **From Admin Deck**: Click **DECLARE SOLD** — observe the victory banner, squad increment, and purse deduction!
 
 ---
 
-## 🧪 Comprehensive Integration Test Suite
-
-The project includes an in-process integration test suite covering 39 critical scenarios:
-```bash
-npm test
-```
-
-### Verified Test Categories:
-- ✅ **API Health Check**: HTTP 200 with server telemetry.
-- ✅ **Security & Authorization**: 401 Unauthorized for requests lacking valid JWT.
-- ✅ **Admin Login**: 401 on invalid passwords, 200 with signed JWT on valid credentials.
-- ✅ **6-Field Validation**: Rejects missing photos (`PHOTO_REQUIRED`), missing positions, invalid emails, and out-of-range phone numbers.
-- ✅ **Player Registration**: 201 Created with unique `PLR-2026-XXXXXX` and status `PENDING`.
-- ✅ **Duplicate Prevention**: 409 Conflict with `DUPLICATE_EMAIL` and `DUPLICATE_PHONE`.
-- ✅ **Public Status Lookup**: Retrieves masked player data without leaking private contact information; returns 404 for unknown IDs.
-- ✅ **Admin Approval**: Promotes candidate to `APPROVED` and adds to the auction draft pool.
-- ✅ **Admin Rejection**: Records reason and updates public status to `REJECTED`.
-- ✅ **Admin Statistics**: Live summary counts and position breakdown.
-
----
-
-## 📁 Repository Structure
-
-```
-football-league-management-system/
-├── package.json                 # Concurrently orchestrates server, admin & player portal
-├── README.md                    # System documentation
-│
-├── server/                      # Shared Express API (Port 5000)
-│   ├── .env                     # Server environment & Cloudinary config
-│   ├── .env.example
-│   ├── src/
-│   │   ├── config/              # DB & Cloudinary configuration
-│   │   ├── controllers/         # Auth, Player, Dashboard & Health controllers
-│   │   ├── middleware/          # JWT auth, Multer upload & Central error handler
-│   │   ├── models/              # Player & Admin Mongoose models
-│   │   ├── routes/              # Modular API routes (/api/auth, /api/players, etc.)
-│   │   ├── services/            # Dual-mode repository (MongoDB + in-memory fallback)
-│   │   ├── test_runner.ts       # 39-step automated test suite
-│   │   ├── app.ts               # Express application builder
-│   │   └── server.ts            # Server entrypoint
-│   └── uploads/players/         # Local disk storage for player photos (fallback)
-│
-├── player-registration/         # Public Player Portal (Port 5174)
-│   ├── vite.config.ts           # Reverse proxy to port 5000 (/api & /uploads)
-│   └── src/
-│       ├── components/
-│       │   ├── Header.tsx       # Logo, tournament title & live status indicator
-│       │   ├── HeroSection.tsx  # Call to action & registration countdown
-│       │   ├── InstructionsCard.tsx # 6 required field guidelines & photo requirements
-│       │   ├── RegistrationForm.tsx # 6-field form with photo preview & validation
-│       │   ├── SuccessView.tsx  # Confirmation screen with Registration ID copy tool
-│       │   ├── StatusChecker.tsx# Public status tracker
-│       │   └── Footer.tsx
-│       ├── App.tsx
-│       └── main.tsx
-│
-└── admin-dashboard/             # Private Management Console (Port 5173)
-    ├── vite.config.ts           # Reverse proxy to port 5000
-    └── src/
-        ├── components/          # Reusable UI cards, tables, badges, and modals
-        ├── pages/
-        │   ├── RegistrationsPage.tsx # Review, search, filter, approve & reject players
-        │   ├── DashboardPage.tsx     # Executive analytics
-        │   └── PlayersPage.tsx       # Tournament player pool
-        ├── services/            # Typed playerService, authService & api client
-        ├── App.tsx
-        └── main.tsx
-```
-
----
-
-## ☁️ Cloudinary Configuration
-
-To stream player photos directly to Cloudinary CDN, update `server/.env`:
-```env
-CLOUDINARY_CLOUD_NAME=your_cloud_name
-CLOUDINARY_API_KEY=your_api_key
-CLOUDINARY_API_SECRET=your_api_secret
-```
-
-> **Note**: If Cloudinary credentials are not configured, the system automatically uses secure local disk storage in `server/uploads/players/` and serves photos statically via `/uploads/players/`. Zero setup required for local development.
-
----
-
-## 🔮 Roadmap: Upcoming Phase 3
-- **Live Player Auction Engine**: WebSocket real-time bidding room.
-- **Franchise Purse Caps**: Automated purse deduction and bid timer controls.
-- **Roster Allocation**: Automatic team squad assignment upon auction gavel.
+## 🛡️ License
+MIT License. Built for professional tournament and league operations.

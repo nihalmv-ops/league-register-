@@ -6,6 +6,8 @@ import { PlayersPage } from './pages/PlayersPage';
 import { RegistrationsPage } from './pages/RegistrationsPage';
 import { TeamsPage } from './pages/TeamsPage';
 import { LiveAuctionPage } from './pages/LiveAuctionPage';
+import { ProjectorScreen } from './pages/ProjectorScreen';
+import { ManagerBiddingPage } from './pages/ManagerBiddingPage';
 import { TeamSquadsPage } from './pages/TeamSquadsPage';
 import { PosterGeneratorPage } from './pages/PosterGeneratorPage';
 import { FixturesPage } from './pages/FixturesPage';
@@ -18,6 +20,11 @@ export const App: React.FC = () => {
   return (
     <BrowserRouter>
       <Routes>
+        {/* Fullscreen Dedicated Projector Displays (Standalone Cinema View) */}
+        <Route path="/auction/projector" element={<ProjectorScreen />} />
+        <Route path="/auction/live/:auctionId" element={<ProjectorScreen />} />
+
+        {/* Dashboard Shell Navigation */}
         <Route path="/" element={<DashboardLayout />}>
           {/* 1. Dashboard Overview */}
           <Route index element={<DashboardPage />} />
@@ -31,8 +38,11 @@ export const App: React.FC = () => {
           {/* 4. Teams */}
           <Route path="teams" element={<TeamsPage />} />
 
-          {/* 5. Live Auction */}
+          {/* 5. Live Auction Admin Deck */}
           <Route path="auction" element={<LiveAuctionPage />} />
+
+          {/* 5b. Manager Live Bidding Portal */}
+          <Route path="auction/manager" element={<ManagerBiddingPage />} />
 
           {/* 6. Team Squads */}
           <Route path="squads" element={<TeamSquadsPage />} />

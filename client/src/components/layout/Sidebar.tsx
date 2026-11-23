@@ -16,6 +16,7 @@ import {
   ChevronRight,
   CircleDot,
   X,
+  Monitor,
 } from 'lucide-react';
 import { Badge } from '../common/Badge';
 
@@ -80,6 +81,19 @@ export const Sidebar: React.FC<SidebarProps> = ({
       path: '/auction',
       icon: Gavel,
       isLive: true,
+      category: 'Auction Hub',
+    },
+    {
+      title: 'Manager Bidding',
+      path: '/auction/manager',
+      icon: Users,
+      badgeVariant: 'yellow',
+      category: 'Auction Hub',
+    },
+    {
+      title: 'Projector Screen',
+      path: '/auction/projector',
+      icon: Monitor,
       category: 'Auction Hub',
     },
     {

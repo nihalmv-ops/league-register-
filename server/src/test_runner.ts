@@ -402,6 +402,225 @@ async function runTests() {
     assert(typeof statsRes.data.data?.summary?.total === 'number', 'Summary contains total count');
     assert(typeof statsRes.data.data?.byPosition?.Forward === 'number', 'Position distribution contains Forward count');
 
+    // ======================================================
+    // PHASE 4: LIVE PLAYER AUCTION SYSTEM TEST SUITE
+    // ======================================================
+
+    // 10. Live Auction Initialization & Admin Controls
+    console.log('\n--- 10. Live Auction Initialization & Admin Controls ---');
+    const activeAuctionRes = await callExpress('GET', '/api/admin/auctions/active', authHeaders);
+    assert(activeAuctionRes.status === 200, 'Admin can fetch active auction state');
+    assert(Boolean(activeAuctionRes.data.data?.auction), 'Active auction object exists');
+
+    const auctionId = activeAuctionRes.data.data.auction._id;
+
+    // Start Auction
+    const startRes = await callExpress('PATCH', `/api/admin/auctions/${auctionId}/start`, authHeaders);
+    assert(startRes.status === 200, 'Admin can start the live auction');
+    assert(startRes.data.data?.auction?.status === 'live', 'Auction status becomes LIVE');
+
+    // Pause Auction
+    const pauseRes = await callExpress('PATCH', `/api/admin/auctions/${auctionId}/pause`, authHeaders);
+    assert(pauseRes.status === 200, 'Admin can pause the live auction');
+    assert(pauseRes.data.data?.auction?.status === 'paused', 'Auction status becomes PAUSED');
+
+    // Resume Auction
+    const resumeRes = await callExpress('PATCH', `/api/admin/auctions/${auctionId}/resume`, authHeaders);
+    assert(resumeRes.status === 200, 'Admin can resume the live auction');
+    assert(resumeRes.data.data?.auction?.status === 'live', 'Auction status resumes to LIVE');
+
+    // 11. Select Next Approved Player for Podium
+    console.log('\n--- 11. Select Next Approved Player for Podium ---');
+    // First ensure player is APPROVED for draft
+    await callExpress('PATCH', `/api/players/${playerId}/approve`, authHeaders);
+
+    const nextPlayerRes = await callExpress(
+      'PATCH',
+      `/api/admin/auctions/${auctionId}/next-player`,
+      { ...authHeaders, 'content-type': 'application/json' },
+      JSON.stringify({
+        playerId,
+        basePrice: 150000,
+        countdownDuration: 30,
+      })
+    );
+    assert(nextPlayerRes.status === 200, 'Admin can select approved player for bidding podium');
+    assert(nextPlayerRes.data.data?.currentPlayer?.registrationId === createdRegId, 'Current player is loaded on stage');
+    assert(nextPlayerRes.data.data?.auction?.basePrice === 150000, 'Base price set correctly');
+    assert(nextPlayerRes.data.data?.auction?.isBiddingActive === false, 'Bidding is not active until admin starts clock');
+
+    // Start Bidding Clock
+    const startBiddingRes = await callExpress(
+      'PATCH',
+      `/api/admin/auctions/${auctionId}/start-bidding`,
+      { ...authHeaders, 'content-type': 'application/json' },
+      JSON.stringify({ durationSeconds: 30 })
+    );
+    assert(startBiddingRes.status === 200, 'Admin can start the bidding floor');
+    assert(startBiddingRes.data.data?.auction?.isBiddingActive === true, 'Bidding floor is now active');
+
+    // 12. Team Manager Authentication & Security Checks
+    console.log('\n--- 12. Team Manager Authentication ---');
+    // Invalid credentials
+    const badManagerRes = await callExpress(
+      'POST',
+      '/api/auth/manager/login',
+      { 'content-type': 'application/json' },
+      JSON.stringify({ email: 'manager.thunder@football.league', password: 'WrongPassword' })
+    );
+    assert(badManagerRes.status === 401, 'Manager login with wrong password rejected with 401');
+
+    // Manager 1 Login (Thunder Strikers FC)
+    const mgr1Res = await callExpress(
+      'POST',
+      '/api/auth/manager/login',
+      { 'content-type': 'application/json' },
+      JSON.stringify({ email: 'manager.thunder@football.league', password: 'Manager@123' })
+    );
+    assert(mgr1Res.status === 200, 'Manager 1 (Thunder Strikers FC) logs in successfully');
+    assert(typeof mgr1Res.data.data?.token === 'string', 'Manager receives signed JWT token');
+    assert(mgr1Res.data.data?.manager?.teamName === 'Thunder Strikers FC', 'Manager is mapped to Thunder Strikers FC');
+    const mgr1Token = mgr1Res.data.data.token;
+    const mgr1Headers = { Authorization: `Bearer ${mgr1Token}`, 'content-type': 'application/json' };
+
+    // Manager 2 Login (Apex Predators)
+    const mgr2Res = await callExpress(
+      'POST',
+      '/api/auth/manager/login',
+      { 'content-type': 'application/json' },
+      JSON.stringify({ email: 'manager.apex@football.league', password: 'Manager@123' })
+    );
+    assert(mgr2Res.status === 200, 'Manager 2 (Apex Predators) logs in successfully');
+    const mgr2Token = mgr2Res.data.data.token;
+    const mgr2Headers = { Authorization: `Bearer ${mgr2Token}`, 'content-type': 'application/json' };
+
+    // Security: Admin token cannot access manager bidding route
+    const adminAsManagerRes = await callExpress(
+      'POST',
+      `/api/manager/auctions/${auctionId}/bid`,
+      { ...authHeaders, 'content-type': 'application/json' },
+      JSON.stringify({ amount: 160000 })
+    );
+    assert(adminAsManagerRes.status === 403, 'Admin token cannot place manager bids (Role separation enforced)');
+
+    // 13. Live Bidding Engine & Validations
+    console.log('\n--- 13. Live Bidding Engine & Validations ---');
+    // Bid below base price ($150,000)
+    const lowBidRes = await callExpress(
+      'POST',
+      `/api/manager/auctions/${auctionId}/bid`,
+      mgr1Headers,
+      JSON.stringify({ amount: 100000 })
+    );
+    assert(lowBidRes.status === 400, 'Bid below base price is rejected');
+
+    // Valid Opening Bid by Thunder Strikers ($160,000)
+    const bid1Res = await callExpress(
+      'POST',
+      `/api/manager/auctions/${auctionId}/bid`,
+      mgr1Headers,
+      JSON.stringify({ amount: 160000 })
+    );
+    assert(bid1Res.status === 200, 'Valid opening bid by Manager 1 accepted');
+    assert(bid1Res.data.data?.bid?.amount === 160000, 'Bid record matches $160,000');
+    assert(bid1Res.data.data?.state?.auction?.currentHighestBid === 160000, 'Auction state updates highest bid to $160,000');
+    assert(bid1Res.data.data?.state?.leadingTeam?.name === 'Thunder Strikers FC', 'Leading team is Thunder Strikers FC');
+
+    // Sequential Opposing Bid by Manager 2 (Apex Predators) ($180,000)
+    const bid2Res = await callExpress(
+      'POST',
+      `/api/manager/auctions/${auctionId}/bid`,
+      mgr2Headers,
+      JSON.stringify({ amount: 180000 })
+    );
+    assert(bid2Res.status === 200, 'Manager 2 (Apex Predators) successfully outbids Manager 1');
+    assert(bid2Res.data.data?.state?.auction?.currentHighestBid === 180000, 'Highest bid advances to $180,000');
+    assert(bid2Res.data.data?.state?.leadingTeam?.name === 'Apex Predators', 'Leading team changes to Apex Predators');
+
+    // Attempt Bid equal or lower than current highest ($170,000)
+    const underBidRes = await callExpress(
+      'POST',
+      `/api/manager/auctions/${auctionId}/bid`,
+      mgr1Headers,
+      JSON.stringify({ amount: 170000 })
+    );
+    assert(underBidRes.status === 400, 'Bid lower than current highest is rejected');
+
+    // Attempt Bid exceeding team remaining budget ($5,000,000)
+    const overBudgetRes = await callExpress(
+      'POST',
+      `/api/manager/auctions/${auctionId}/bid`,
+      mgr1Headers,
+      JSON.stringify({ amount: 5000000 })
+    );
+    assert(overBudgetRes.status === 400, 'Bid exceeding franchise purse ceiling is rejected');
+
+    // Counter Bid by Manager 1 ($220,000)
+    const bid3Res = await callExpress(
+      'POST',
+      `/api/manager/auctions/${auctionId}/bid`,
+      mgr1Headers,
+      JSON.stringify({ amount: 220000 })
+    );
+    assert(bid3Res.status === 200, 'Counter bid of $220,000 by Thunder Strikers accepted');
+    assert(bid3Res.data.data?.state?.leadingTeam?.name === 'Thunder Strikers FC', 'Thunder Strikers FC re-claims lead');
+
+    // 14. SOLD Process: Winner Allocation & Purse Deduction
+    console.log('\n--- 14. SOLD Process: Winner Allocation & Purse Deduction ---');
+    const soldRes = await callExpress('PATCH', `/api/admin/auctions/${auctionId}/sold`, authHeaders);
+    assert(soldRes.status === 200, 'Admin declares SOLD successfully');
+    assert(soldRes.data.data?.result?.resultStatus === 'SOLD', 'Auction result is recorded as SOLD');
+    assert(soldRes.data.data?.result?.finalPrice === 220000, 'Final price recorded as $220,000');
+
+    // Verify player is now SOLD in database
+    const soldPlayerRes = await callExpress('GET', `/api/players/${playerId}`, authHeaders);
+    assert(soldPlayerRes.data.data?.auctionStatus === 'sold', 'Player auctionStatus updated to sold');
+    assert(soldPlayerRes.data.data?.soldPrice === 220000, 'Player soldPrice set to $220,000');
+    assert(soldPlayerRes.data.data?.teamName === 'Thunder Strikers FC', 'Player teamName set to Thunder Strikers FC');
+
+    // Verify winning team budget was automatically deducted
+    const mgr1ProfileRes = await callExpress('GET', '/api/auth/manager/me', mgr1Headers);
+    assert(
+      mgr1ProfileRes.data.data?.team?.remainingBudget === 1500000 - 220000,
+      'Winning team budget correctly deducted ($1,500,000 - $220,000 = $1,280,000)'
+    );
+    assert(mgr1ProfileRes.data.data?.team?.playersCount === 1, 'Winning team squad count incremented to 1');
+
+    // Verify duplicate sale prevented
+    const duplicateSoldRes = await callExpress('PATCH', `/api/admin/auctions/${auctionId}/sold`, authHeaders);
+    assert(duplicateSoldRes.status === 400, 'Cannot declare SOLD when lot is empty or already sold');
+
+    // 15. UNSOLD Process
+    console.log('\n--- 15. UNSOLD Process ---');
+    // Ensure second player is APPROVED so they are eligible for the auction floor
+    const approveHaalandRes = await callExpress('PATCH', '/api/players/mem-plr-002/approve', authHeaders);
+    assert(approveHaalandRes.status === 200, 'Approved second player (Erling Haaland) for auction');
+
+    // Bring Erling Haaland (PLR-2026-823532) on stage
+    const haalandRes = await callExpress(
+      'PATCH',
+      `/api/admin/auctions/${auctionId}/next-player`,
+      { ...authHeaders, 'content-type': 'application/json' },
+      JSON.stringify({ playerId: 'mem-plr-002', basePrice: 200000 })
+    );
+    assert(haalandRes.status === 200, 'Brought second player on stage');
+
+    const unsoldRes = await callExpress('PATCH', `/api/admin/auctions/${auctionId}/unsold`, authHeaders);
+    assert(unsoldRes.status === 200, 'Admin can declare lot UNSOLD');
+    assert(unsoldRes.data.data?.result?.resultStatus === 'UNSOLD', 'Auction result recorded as UNSOLD');
+    assert(unsoldRes.data.data?.result?.finalPrice === 0, 'UNSOLD final price is 0');
+
+    // 16. Projector Live Screen Telemetry & Privacy Check
+    console.log('\n--- 16. Projector Live Screen & Privacy Check ---');
+    const projectorRes = await callExpress('GET', `/api/auctions/${auctionId}/live`);
+    assert(projectorRes.status === 200, 'Projector live endpoint returns 200 OK');
+    assert(Boolean(projectorRes.data.data?.auction), 'Projector receives active auction telemetry');
+
+    // Privacy verification: no phone numbers or email addresses in projector data
+    const projectorJson = JSON.stringify(projectorRes.data);
+    assert(!projectorJson.includes('+33 612 345 678'), 'Private phone number is strictly NOT exposed in projector view');
+    assert(!projectorJson.includes('kylian.mbappe@league-test.org'), 'Private email address is strictly NOT exposed in projector view');
+
     console.log('\n======================================================');
     console.log(`📊 TEST SUITE SUMMARY: ${passedCount} PASSED, ${failedCount} FAILED`);
     console.log('======================================================\n');

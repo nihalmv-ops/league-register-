@@ -1,11 +1,14 @@
+import http from 'http';
 import app from './app';
 import { config } from './config/env';
 import { connectDatabase } from './config/db';
 import { logger } from './utils/logger';
 import { Admin } from './models/Admin';
+import { setupSocketServer } from './socket';
+import { auctionRepository } from './services/auctionRepository';
 
-// Helper to seed initial admin
-const seedInitialAdmin = async () => {
+// Helper to seed initial admin and auction entities
+const seedInitialData = async () => {
   try {
     const adminCount = await Admin.countDocuments();
     if (adminCount === 0) {
@@ -17,26 +20,36 @@ const seedInitialAdmin = async () => {
       });
       logger.info(`👑 Default admin initialized: ${config.adminEmail}`);
     }
+
+    // Seed Teams, Managers, Auction
+    await auctionRepository.ensureSeeded();
   } catch (err: any) {
-    logger.warn('Initial admin check deferred:', err?.message || err);
+    logger.warn('Initial seed check deferred:', err?.message || err);
   }
 };
 
 // Bootstrap Server
 const startServer = async () => {
   try {
-    const server = app.listen(config.port, () => {
+    const httpServer = http.createServer(app);
+
+    // Initialize Socket.IO
+    const io = setupSocketServer(httpServer);
+    logger.info('⚡ Socket.IO real-time engine initialized for Live Player Auction');
+
+    httpServer.listen(config.port, () => {
       logger.info(`⚽ Football League Management Server is running on port ${config.port}`);
       logger.info(`🚀 API Base URL: http://localhost:${config.port}/api`);
       logger.info(`🩺 Health Check: http://localhost:${config.port}/api/health`);
-      logger.info(`📝 Player Registration Endpoint: http://localhost:${config.port}/api/players/register`);
+      logger.info(`📝 Player Registration: http://localhost:${config.port}/api/players/register`);
+      logger.info(`🔨 Live Auction WebSocket: ws://localhost:${config.port}`);
     });
 
     // Connect to database in background
     connectDatabase()
       .then((connected) => {
         if (connected) {
-          seedInitialAdmin();
+          seedInitialData();
         }
       })
       .catch((err) => {
@@ -45,7 +58,10 @@ const startServer = async () => {
 
     const shutdown = () => {
       logger.info('Shutting down server gracefully...');
-      server.close(() => {
+      io.close(() => {
+        logger.info('Socket.IO connections closed');
+      });
+      httpServer.close(() => {
         logger.info('HTTP server closed');
         process.exit(0);
       });
