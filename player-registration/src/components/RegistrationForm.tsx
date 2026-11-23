@@ -61,7 +61,7 @@ export const RegistrationForm: React.FC<RegistrationFormProps> = ({ onSuccess })
       id: 'Midfielder',
       title: 'Midfielder',
       desc: 'Playmaking, ball retention & box-to-box',
-      icon: <Compass className="w-5 h-5 text-emerald-400" />,
+      icon: <Compass className="w-5 h-5 text-orange-400" />,
     },
     {
       id: 'Forward',
@@ -169,10 +169,8 @@ export const RegistrationForm: React.FC<RegistrationFormProps> = ({ onSuccess })
       newErrors.phoneNumber = 'Please enter a valid phone number with 7-15 digits (e.g. +1 555 123 4567)';
     }
 
-    // 4. Email
-    if (!email.trim()) {
-      newErrors.email = 'Email address is required';
-    } else if (!/^\S+@\S+\.\S+$/.test(email.trim())) {
+    // 4. Email (Optional)
+    if (email.trim() && !/^\S+@\S+\.\S+$/.test(email.trim())) {
       newErrors.email = 'Please enter a valid email address';
     }
 
@@ -207,7 +205,9 @@ export const RegistrationForm: React.FC<RegistrationFormProps> = ({ onSuccess })
       formData.append('fullName', fullName.trim());
       formData.append('dateOfBirth', dateOfBirth);
       formData.append('phoneNumber', phoneNumber.trim());
-      formData.append('email', email.toLowerCase().trim());
+      if (email.trim()) {
+        formData.append('email', email.toLowerCase().trim());
+      }
       formData.append('playingPosition', playingPosition);
       if (photoFile) {
         formData.append('photo', photoFile);
@@ -242,13 +242,13 @@ export const RegistrationForm: React.FC<RegistrationFormProps> = ({ onSuccess })
         {/* Form Title & Subtitle */}
         <div className="border-b border-pitch-border pb-6 text-center sm:text-left">
           <div className="flex items-center gap-2 justify-center sm:justify-start">
-            <span className="w-2.5 h-2.5 rounded-full bg-emerald-400" />
+            <span className="w-2.5 h-2.5 rounded-full bg-orange-400" />
             <h2 className="text-xl sm:text-2xl font-black text-white tracking-tight">
               Official Player Registration Form
             </h2>
           </div>
           <p className="text-xs sm:text-sm text-slate-400 mt-1">
-            All six fields below are mandatory. Please provide accurate identity details for tournament clearance.
+            Please provide accurate identity details for tournament clearance. Email is optional.
           </p>
         </div>
 
@@ -267,7 +267,7 @@ export const RegistrationForm: React.FC<RegistrationFormProps> = ({ onSuccess })
         <div className="space-y-2">
           <label className="text-xs sm:text-sm font-bold text-slate-200 flex items-center justify-between">
             <span className="flex items-center gap-1.5">
-              <User className="w-4 h-4 text-emerald-400" />
+              <User className="w-4 h-4 text-orange-400" />
               1. Full Legal Name <span className="text-rose-400">*</span>
             </span>
             <span className="text-[11px] text-slate-400 font-normal">
@@ -285,7 +285,7 @@ export const RegistrationForm: React.FC<RegistrationFormProps> = ({ onSuccess })
             className={`w-full bg-pitch-darker border rounded-xl px-4 py-3 text-sm text-white placeholder-slate-500 focus:outline-none transition-all ${
               errors.fullName
                 ? 'border-rose-500 ring-1 ring-rose-500/40'
-                : 'border-pitch-border focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500/40'
+                : 'border-pitch-border focus:border-orange-500 focus:ring-1 focus:ring-orange-500/40'
             }`}
           />
           {errors.fullName && (
@@ -298,11 +298,11 @@ export const RegistrationForm: React.FC<RegistrationFormProps> = ({ onSuccess })
           <div className="space-y-2">
             <label className="text-xs sm:text-sm font-bold text-slate-200 flex items-center justify-between">
               <span className="flex items-center gap-1.5">
-                <Calendar className="w-4 h-4 text-emerald-400" />
+                <Calendar className="w-4 h-4 text-orange-400" />
                 2. Date of Birth <span className="text-rose-400">*</span>
               </span>
               {playerAge !== null && playerAge >= 0 && (
-                <span className="text-[11px] font-mono font-bold text-emerald-400 bg-emerald-500/10 px-2 py-0.5 rounded border border-emerald-500/20">
+                <span className="text-[11px] font-mono font-bold text-orange-400 bg-orange-500/10 px-2 py-0.5 rounded border border-orange-500/20">
                   Age: {playerAge}
                 </span>
               )}
@@ -317,7 +317,7 @@ export const RegistrationForm: React.FC<RegistrationFormProps> = ({ onSuccess })
               className={`w-full bg-pitch-darker border rounded-xl px-4 py-3 text-sm text-white focus:outline-none transition-all ${
                 errors.dateOfBirth
                   ? 'border-rose-500 ring-1 ring-rose-500/40'
-                  : 'border-pitch-border focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500/40'
+                  : 'border-pitch-border focus:border-orange-500 focus:ring-1 focus:ring-orange-500/40'
               }`}
             />
             {errors.dateOfBirth && (
@@ -328,7 +328,7 @@ export const RegistrationForm: React.FC<RegistrationFormProps> = ({ onSuccess })
           {/* 3. Phone Number */}
           <div className="space-y-2">
             <label className="text-xs sm:text-sm font-bold text-slate-200 flex items-center gap-1.5">
-              <Phone className="w-4 h-4 text-emerald-400" />
+              <Phone className="w-4 h-4 text-orange-400" />
               3. Phone Number <span className="text-rose-400">*</span>
             </label>
             <input
@@ -342,7 +342,7 @@ export const RegistrationForm: React.FC<RegistrationFormProps> = ({ onSuccess })
               className={`w-full bg-pitch-darker border rounded-xl px-4 py-3 text-sm text-white placeholder-slate-500 focus:outline-none transition-all ${
                 errors.phoneNumber
                   ? 'border-rose-500 ring-1 ring-rose-500/40'
-                  : 'border-pitch-border focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500/40'
+                  : 'border-pitch-border focus:border-orange-500 focus:ring-1 focus:ring-orange-500/40'
               }`}
             />
             {errors.phoneNumber && (
@@ -351,15 +351,15 @@ export const RegistrationForm: React.FC<RegistrationFormProps> = ({ onSuccess })
           </div>
         </div>
 
-        {/* 4. Email */}
+        {/* 4. Email (Optional) */}
         <div className="space-y-2">
           <label className="text-xs sm:text-sm font-bold text-slate-200 flex items-center justify-between">
             <span className="flex items-center gap-1.5">
-              <Mail className="w-4 h-4 text-emerald-400" />
-              4. Email Address <span className="text-rose-400">*</span>
+              <Mail className="w-4 h-4 text-orange-400" />
+              4. Email Address <span className="text-slate-400 font-normal text-xs">(Optional)</span>
             </span>
             <span className="text-[11px] text-slate-400 font-normal">
-              Registration receipt & ID sent here
+              Digital receipt & updates (optional)
             </span>
           </label>
           <input
@@ -369,11 +369,11 @@ export const RegistrationForm: React.FC<RegistrationFormProps> = ({ onSuccess })
               setEmail(e.target.value);
               if (errors.email) setErrors({ ...errors, email: '' });
             }}
-            placeholder="player@example.com"
+            placeholder="player@example.com (optional)"
             className={`w-full bg-pitch-darker border rounded-xl px-4 py-3 text-sm text-white placeholder-slate-500 focus:outline-none transition-all ${
               errors.email
                 ? 'border-rose-500 ring-1 ring-rose-500/40'
-                : 'border-pitch-border focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500/40'
+                : 'border-pitch-border focus:border-orange-500 focus:ring-1 focus:ring-orange-500/40'
             }`}
           />
           {errors.email && (
@@ -385,7 +385,7 @@ export const RegistrationForm: React.FC<RegistrationFormProps> = ({ onSuccess })
         <div className="space-y-3">
           <label className="text-xs sm:text-sm font-bold text-slate-200 flex items-center justify-between">
             <span className="flex items-center gap-1.5">
-              <Compass className="w-4 h-4 text-emerald-400" />
+              <Compass className="w-4 h-4 text-orange-400" />
               5. Playing Position <span className="text-rose-400">*</span>
             </span>
             <span className="text-[11px] text-slate-400 font-normal">
@@ -405,7 +405,7 @@ export const RegistrationForm: React.FC<RegistrationFormProps> = ({ onSuccess })
                   }}
                   className={`p-4 rounded-2xl border cursor-pointer transition-all duration-200 flex items-start gap-3.5 ${
                     isSelected
-                      ? 'bg-emerald-500/10 border-emerald-500 shadow-pitch-glow'
+                      ? 'bg-orange-500/10 border-orange-500 shadow-pitch-glow'
                       : 'bg-pitch-darker/80 border-pitch-border hover:border-slate-600 hover:bg-pitch-darker'
                   }`}
                 >
@@ -416,13 +416,13 @@ export const RegistrationForm: React.FC<RegistrationFormProps> = ({ onSuccess })
                     <div className="flex items-center justify-between">
                       <h4
                         className={`text-sm font-extrabold ${
-                          isSelected ? 'text-emerald-400' : 'text-white'
+                          isSelected ? 'text-orange-400' : 'text-white'
                         }`}
                       >
                         {pos.title}
                       </h4>
                       {isSelected && (
-                        <CheckCircle2 className="w-4 h-4 text-emerald-400 shrink-0" />
+                        <CheckCircle2 className="w-4 h-4 text-orange-400 shrink-0" />
                       )}
                     </div>
                     <p className="text-[11px] text-slate-400 mt-0.5 leading-normal">
@@ -443,7 +443,7 @@ export const RegistrationForm: React.FC<RegistrationFormProps> = ({ onSuccess })
         <div className="space-y-3">
           <label className="text-xs sm:text-sm font-bold text-slate-200 flex items-center justify-between">
             <span className="flex items-center gap-1.5">
-              <Camera className="w-4 h-4 text-emerald-400" />
+              <Camera className="w-4 h-4 text-orange-400" />
               6. Player Profile Photo <span className="text-rose-400">*</span>
             </span>
             <span className="text-[11px] text-slate-400 font-normal">
@@ -464,13 +464,13 @@ export const RegistrationForm: React.FC<RegistrationFormProps> = ({ onSuccess })
             /* Upload Dropzone */
             <div
               onClick={() => fileInputRef.current?.click()}
-              className={`p-8 border-2 border-dashed rounded-2xl flex flex-col items-center justify-center text-center cursor-pointer transition-all duration-200 bg-pitch-darker/60 hover:bg-pitch-darker hover:border-emerald-500/60 ${
+              className={`p-8 border-2 border-dashed rounded-2xl flex flex-col items-center justify-center text-center cursor-pointer transition-all duration-200 bg-pitch-darker/60 hover:bg-pitch-darker hover:border-orange-500/60 ${
                 errors.photo
                   ? 'border-rose-500'
                   : 'border-pitch-border'
               }`}
             >
-              <div className="w-12 h-12 rounded-2xl bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 flex items-center justify-center mb-3 shadow-pitch-glow">
+              <div className="w-12 h-12 rounded-2xl bg-orange-500/10 border border-orange-500/20 text-orange-400 flex items-center justify-center mb-3 shadow-pitch-glow">
                 <Upload className="w-6 h-6" />
               </div>
               <h4 className="text-sm font-bold text-white mb-1">
@@ -485,9 +485,9 @@ export const RegistrationForm: React.FC<RegistrationFormProps> = ({ onSuccess })
             </div>
           ) : (
             /* Photo Preview with Replace / Remove controls */
-            <div className="p-4 rounded-2xl bg-pitch-darker border border-emerald-500/40 flex flex-col sm:flex-row items-center justify-between gap-4">
+            <div className="p-4 rounded-2xl bg-pitch-darker border border-orange-500/40 flex flex-col sm:flex-row items-center justify-between gap-4">
               <div className="flex items-center gap-4">
-                <div className="relative w-20 h-20 rounded-2xl overflow-hidden border-2 border-emerald-500/50 shadow-pitch-glow shrink-0">
+                <div className="relative w-20 h-20 rounded-2xl overflow-hidden border-2 border-orange-500/50 shadow-pitch-glow shrink-0">
                   <img
                     src={photoPreview}
                     alt="Player Profile Preview"
@@ -501,7 +501,7 @@ export const RegistrationForm: React.FC<RegistrationFormProps> = ({ onSuccess })
                   <p className="text-xs text-slate-400 mt-0.5">
                     Size: {((photoFile?.size || 0) / (1024 * 1024)).toFixed(2)} MB • Ready for Cloudinary
                   </p>
-                  <span className="inline-flex items-center gap-1 text-[10px] font-semibold text-emerald-400 mt-1">
+                  <span className="inline-flex items-center gap-1 text-[10px] font-semibold text-orange-400 mt-1">
                     <CheckCircle2 className="w-3 h-3" /> Valid Photo Attached
                   </span>
                 </div>
@@ -514,7 +514,7 @@ export const RegistrationForm: React.FC<RegistrationFormProps> = ({ onSuccess })
                   onClick={() => fileInputRef.current?.click()}
                   className="px-3 py-1.5 rounded-xl bg-pitch-card hover:bg-slate-800 border border-pitch-border text-xs text-slate-200 font-semibold flex items-center gap-1.5 transition-colors cursor-pointer"
                 >
-                  <RotateCw className="w-3.5 h-3.5 text-emerald-400" />
+                  <RotateCw className="w-3.5 h-3.5 text-orange-400" />
                   <span>Replace Photo</span>
                 </button>
                 <button

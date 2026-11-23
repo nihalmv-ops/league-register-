@@ -37,8 +37,11 @@ const playerRegistrationSchema = z.object({
     }, 'Phone number must contain between 7 and 15 digits'),
   email: z
     .string()
-    .email('Invalid email address')
-    .max(120, 'Email must not exceed 120 characters'),
+    .trim()
+    .max(120, 'Email must not exceed 120 characters')
+    .refine((val) => !val || /^\S+@\S+\.\S+$/.test(val), 'Please provide a valid email address')
+    .optional()
+    .or(z.literal('')),
   playingPosition: z.enum(validPositions, {
     errorMap: () => ({ message: 'Playing position must be Goalkeeper, Defender, Midfielder, or Forward' }),
   }),
@@ -88,14 +91,14 @@ export const registerPlayer = async (req: Request, res: Response): Promise<void>
     }
 
     const { fullName, dateOfBirth, phoneNumber, email, playingPosition } = validation.data;
-    const normalizedEmail = email.toLowerCase().trim();
+    const normalizedEmail = email && email.trim() ? email.toLowerCase().trim() : undefined;
     const normalizedPhone = phoneNumber.replace(/[\s-]/g, '').trim();
 
-    // 3. Prevent duplicate registrations (Check email & phone)
+    // 3. Prevent duplicate registrations (Check email if provided, and phone)
     const existingPlayer = await playerRepository.findByEmailOrPhone(normalizedEmail, normalizedPhone);
 
     if (existingPlayer) {
-      if (existingPlayer.email.toLowerCase().trim() === normalizedEmail) {
+      if (normalizedEmail && existingPlayer.email && existingPlayer.email.toLowerCase().trim() === normalizedEmail) {
         sendError(
           res,
           `A registration with the email "${normalizedEmail}" already exists. Check your application status using your Registration ID.`,

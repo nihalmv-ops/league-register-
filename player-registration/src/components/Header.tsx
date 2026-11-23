@@ -16,7 +16,7 @@ export const Header: React.FC<HeaderProps> = ({
     <header className="sticky top-0 z-30 h-16 bg-pitch-darkest/90 backdrop-blur-md border-b border-pitch-border px-4 sm:px-8 flex items-center justify-between">
       {/* Brand & Logo */}
       <div className="flex items-center gap-3">
-        <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-emerald-400 to-emerald-600 flex items-center justify-center text-slate-950 font-black shadow-pitch-glow text-xl shrink-0">
+        <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-orange-400 to-orange-600 flex items-center justify-center text-slate-950 font-black shadow-pitch-glow text-xl shrink-0">
           ⚽
         </div>
         <div>
@@ -25,7 +25,7 @@ export const Header: React.FC<HeaderProps> = ({
               PREMIER FOOTBALL LEAGUE
             </span>
           </div>
-          <span className="text-[10px] font-bold text-emerald-400 uppercase tracking-widest block">
+          <span className="text-[10px] font-bold text-orange-400 uppercase tracking-widest block">
             Official Player Registration Portal
           </span>
         </div>
@@ -34,8 +34,8 @@ export const Header: React.FC<HeaderProps> = ({
       {/* Status Pill & Navigation Actions */}
       <div className="flex items-center gap-3">
         {/* Registration open/closed status */}
-        <div className="hidden sm:inline-flex items-center gap-1.5 text-xs font-bold px-3 py-1 rounded-full bg-emerald-500/10 text-emerald-400 border border-emerald-500/30">
-          <Radio className="w-3 h-3 text-emerald-400 animate-pulse" />
+        <div className="hidden sm:inline-flex items-center gap-1.5 text-xs font-bold px-3 py-1 rounded-full bg-orange-500/10 text-orange-400 border border-orange-500/30">
+          <Radio className="w-3 h-3 text-orange-400 animate-pulse" />
           <span>REGISTRATIONS OPEN</span>
         </div>
 

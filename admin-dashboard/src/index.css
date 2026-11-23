@@ -4,48 +4,48 @@
 
 @layer base {
   * {
-    border-color: #24344d;
+    border-color: #333345;
   }
   body {
-    background-color: #080c14;
+    background-color: #09090b;
     color: #f1f5f9;
     font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
     overflow-x: hidden;
   }
 }
 
-/* Custom football pitch grid pattern */
+/* Custom football pitch grid pattern with orange accent */
 .pitch-pattern {
   background-image: 
-    linear-gradient(rgba(16, 185, 129, 0.03) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(16, 185, 129, 0.03) 1px, transparent 1px);
+    linear-gradient(rgba(249, 115, 22, 0.04) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(249, 115, 22, 0.04) 1px, transparent 1px);
   background-size: 32px 32px;
 }
 
-/* Subtle glow effects */
+/* Orange glow effects */
 .glow-accent {
-  box-shadow: 0 0 25px -4px rgba(16, 185, 129, 0.3);
+  box-shadow: 0 0 25px -4px rgba(249, 115, 22, 0.4);
 }
 
 .glow-border {
-  border-color: rgba(16, 185, 129, 0.4);
+  border-color: rgba(249, 115, 22, 0.45);
 }
 
-/* Custom dark scrollbar */
+/* Custom dark scrollbar with orange hover */
 ::-webkit-scrollbar {
   width: 6px;
   height: 6px;
 }
 
 ::-webkit-scrollbar-track {
-  background: #0d131f;
+  background: #0f0f14;
 }
 
 ::-webkit-scrollbar-thumb {
-  background: #24344d;
+  background: #333345;
   border-radius: 9999px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: #10b981;
+  background: #f97316;
 }

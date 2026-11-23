@@ -9,7 +9,7 @@ export interface PlayerRecord {
   fullName: string;
   dateOfBirth: Date;
   phoneNumber: string;
-  email: string;
+  email?: string;
   playingPosition: PlayingPosition;
   photoUrl: string;
   photoPublicId?: string;
@@ -104,14 +104,20 @@ const inMemoryPlayers: PlayerRecord[] = [
 const isDbConnected = (): boolean => mongoose.connection.readyState === 1;
 
 export const playerRepository = {
-  async findByEmailOrPhone(email: string, phone: string) {
-    const normEmail = email.toLowerCase().trim();
-    const normPhone = phone.replace(/[\s-]/g, '').trim();
+  async findByEmailOrPhone(email?: string, phone?: string) {
+    const normEmail = email && email.trim() ? email.toLowerCase().trim() : null;
+    const normPhone = phone ? phone.replace(/[\s-]/g, '').trim() : null;
 
     if (isDbConnected()) {
       try {
+        const conditions: any[] = [];
+        if (normEmail) conditions.push({ email: normEmail });
+        if (normPhone) conditions.push({ phoneNumber: normPhone });
+
+        if (conditions.length === 0) return null;
+
         return await Player.findOne({
-          $or: [{ email: normEmail }, { phoneNumber: normPhone }],
+          $or: conditions,
         });
       } catch (err: any) {
         logger.warn('Mongoose query failed, using memory fallback:', err?.message);
@@ -121,8 +127,8 @@ export const playerRepository = {
     return (
       inMemoryPlayers.find(
         (p) =>
-          p.email.toLowerCase().trim() === normEmail ||
-          p.phoneNumber.replace(/[\s-]/g, '').trim() === normPhone
+          (normEmail && p.email && p.email.toLowerCase().trim() === normEmail) ||
+          (normPhone && p.phoneNumber && p.phoneNumber.replace(/[\s-]/g, '').trim() === normPhone)
       ) || null
     );
   },
@@ -145,7 +151,7 @@ export const playerRepository = {
     return (
       inMemoryPlayers.find((p) =>
         isEmail
-          ? p.email.toLowerCase() === trimmed.toLowerCase()
+          ? p.email && p.email.toLowerCase() === trimmed.toLowerCase()
           : p.registrationId.toUpperCase() === trimmed.toUpperCase()
       ) || null
     );
@@ -273,7 +279,7 @@ export const playerRepository = {
       filtered = filtered.filter(
         (p) =>
           p.fullName.toLowerCase().includes(q) ||
-          p.email.toLowerCase().includes(q) ||
+          (p.email && p.email.toLowerCase().includes(q)) ||
           p.registrationId.toLowerCase().includes(q) ||
           p.phoneNumber.includes(q)
       );

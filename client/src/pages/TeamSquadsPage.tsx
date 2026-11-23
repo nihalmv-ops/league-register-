@@ -58,7 +58,7 @@ export const TeamSquadsPage: React.FC = () => {
         <div>
           <h2 className="text-xl sm:text-2xl font-black text-white tracking-tight flex items-center gap-2">
             <span>Team Squads & Tactical Formations</span>
-            <span className="text-xs font-mono text-emerald-400 bg-emerald-500/10 px-2.5 py-0.5 rounded-md border border-emerald-500/20">
+            <span className="text-xs font-mono text-orange-400 bg-orange-500/10 px-2.5 py-0.5 rounded-md border border-orange-500/20">
               {activeSquad.players.length} Players Drafted
             </span>
           </h2>
@@ -109,7 +109,7 @@ export const TeamSquadsPage: React.FC = () => {
           <div className="flex items-center gap-3">
             <div className="text-right">
               <span className="text-[10px] text-slate-400 block">Avg Squad Rating</span>
-              <span className="text-xl font-extrabold text-emerald-400 font-mono">
+              <span className="text-xl font-extrabold text-orange-400 font-mono">
                 {Math.round(
                   activeSquad.players.reduce((sum, p) => sum + p.rating, 0) /
                     (activeSquad.players.length || 1)
@@ -121,16 +121,16 @@ export const TeamSquadsPage: React.FC = () => {
       </Card>
 
       {/* Virtual Football Pitch Diagram Preview */}
-      <Card glow className="relative overflow-hidden p-6 bg-emerald-950/20 border-emerald-500/30">
+      <Card glow className="relative overflow-hidden p-6 bg-orange-950/20 border-orange-500/30">
         <div className="absolute inset-0 pitch-pattern opacity-40 pointer-events-none" />
         <div className="relative z-10 flex flex-col items-center justify-center py-6">
-          <div className="w-full max-w-2xl border-2 border-emerald-500/40 rounded-2xl p-6 bg-slate-950/60 backdrop-blur-sm relative">
+          <div className="w-full max-w-2xl border-2 border-orange-500/40 rounded-2xl p-6 bg-slate-950/60 backdrop-blur-sm relative">
             {/* Center Circle */}
-            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-28 h-28 rounded-full border border-emerald-500/30 pointer-events-none" />
-            <div className="absolute top-1/2 left-0 right-0 h-[1px] bg-emerald-500/30 pointer-events-none" />
+            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-28 h-28 rounded-full border border-orange-500/30 pointer-events-none" />
+            <div className="absolute top-1/2 left-0 right-0 h-[1px] bg-orange-500/30 pointer-events-none" />
 
             <div className="text-center mb-6">
-              <span className="text-xs font-bold uppercase tracking-wider text-emerald-400 bg-pitch-darkest/90 px-3 py-1 rounded-full border border-emerald-500/30">
+              <span className="text-xs font-bold uppercase tracking-wider text-orange-400 bg-pitch-darkest/90 px-3 py-1 rounded-full border border-orange-500/30">
                 Starting XI Tactical Formation Preview
               </span>
             </div>
@@ -156,7 +156,7 @@ export const TeamSquadsPage: React.FC = () => {
                 .filter((p) => p.position === 'MID')
                 .map((p) => (
                   <div key={p.id} className="flex flex-col items-center">
-                    <div className="w-10 h-10 rounded-full bg-emerald-500/20 border-2 border-emerald-500 text-emerald-400 flex items-center justify-center font-bold text-xs shadow-pitch-glow">
+                    <div className="w-10 h-10 rounded-full bg-orange-500/20 border-2 border-orange-500 text-orange-400 flex items-center justify-center font-bold text-xs shadow-pitch-glow">
                       {p.jersey}
                     </div>
                     <span className="text-xs font-bold text-white mt-1">{p.name.split(' ')[1] || p.name}</span>
@@ -232,7 +232,7 @@ export const TeamSquadsPage: React.FC = () => {
                     </span>
                   )}
                 </td>
-                <td className="py-3.5 px-4 font-semibold text-emerald-400">{p.position}</td>
+                <td className="py-3.5 px-4 font-semibold text-orange-400">{p.position}</td>
                 <td className="py-3.5 px-4 font-mono font-extrabold text-white">{p.rating}</td>
                 <td className="py-3.5 px-4 text-slate-300">{p.nationality}</td>
                 <td className="py-3.5 px-4">
@@ -240,7 +240,7 @@ export const TeamSquadsPage: React.FC = () => {
                     {p.role}
                   </Badge>
                 </td>
-                <td className="py-3.5 px-4 text-right font-mono font-bold text-emerald-400">
+                <td className="py-3.5 px-4 text-right font-mono font-bold text-orange-400">
                   ${p.acquiredPrice.toLocaleString()}
                 </td>
               </tr>

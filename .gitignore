@@ -30,6 +30,7 @@ logs/
 *.log
 
 # Editor & OS files
+*.tsbuildinfo
 .vscode/
 .idea/
 *.suo

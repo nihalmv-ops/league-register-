@@ -38,7 +38,7 @@ export const RegistrationTrendsChart: React.FC<RegistrationTrendsChartProps> = (
         <div className="flex items-center justify-between mb-4">
           <div>
             <h3 className="text-sm font-bold text-white tracking-tight flex items-center gap-2">
-              <span className="w-2 h-2 rounded-full bg-emerald-400" />
+              <span className="w-2 h-2 rounded-full bg-orange-400" />
               Registration Velocity & Growth
             </h3>
             <p className="text-xs text-slate-400 mt-0.5">
@@ -46,7 +46,7 @@ export const RegistrationTrendsChart: React.FC<RegistrationTrendsChartProps> = (
             </p>
           </div>
 
-          <div className="flex items-center gap-1.5 text-xs text-emerald-400 bg-emerald-500/10 px-2.5 py-1 rounded-lg border border-emerald-500/20 font-semibold">
+          <div className="flex items-center gap-1.5 text-xs text-orange-400 bg-orange-500/10 px-2.5 py-1 rounded-lg border border-orange-500/20 font-semibold">
             <TrendingUp className="w-3.5 h-3.5" />
             <span>+148 Total</span>
           </div>
@@ -61,8 +61,8 @@ export const RegistrationTrendsChart: React.FC<RegistrationTrendsChartProps> = (
           >
             <defs>
               <linearGradient id="pitchGradient" x1="0" y1="0" x2="0" y2="1">
-                <stop offset="0%" stopColor="#10b981" stopOpacity="0.4" />
-                <stop offset="100%" stopColor="#10b981" stopOpacity="0.0" />
+                <stop offset="0%" stopColor="#f97316" stopOpacity="0.4" />
+                <stop offset="100%" stopColor="#f97316" stopOpacity="0.0" />
               </linearGradient>
             </defs>
 
@@ -76,7 +76,7 @@ export const RegistrationTrendsChart: React.FC<RegistrationTrendsChartProps> = (
                   y1={yVal}
                   x2={chartWidth - paddingX}
                   y2={yVal}
-                  stroke="#24344d"
+                  stroke="#333345"
                   strokeDasharray="4 4"
                   strokeWidth="1"
                 />
@@ -90,7 +90,7 @@ export const RegistrationTrendsChart: React.FC<RegistrationTrendsChartProps> = (
             <path
               d={pathD}
               fill="none"
-              stroke="#10b981"
+              stroke="#f97316"
               strokeWidth="3"
               strokeLinecap="round"
               strokeLinejoin="round"
@@ -103,7 +103,7 @@ export const RegistrationTrendsChart: React.FC<RegistrationTrendsChartProps> = (
                   cx={pt.x}
                   cy={pt.y}
                   r={activePoint?.label === pt.data.label ? '6' : '4'}
-                  className="fill-pitch-darkest stroke-emerald-400 stroke-[2.5px] cursor-pointer hover:r-6 transition-all"
+                  className="fill-pitch-darkest stroke-orange-400 stroke-[2.5px] cursor-pointer hover:r-6 transition-all"
                   onMouseEnter={() => setActivePoint(pt.data)}
                   onMouseLeave={() => setActivePoint(null)}
                 />
@@ -113,7 +113,7 @@ export const RegistrationTrendsChart: React.FC<RegistrationTrendsChartProps> = (
 
           {/* Active tooltip popover */}
           {activePoint && (
-            <div className="absolute top-2 right-4 bg-pitch-darkest border border-emerald-500/50 rounded-xl px-3 py-1.5 shadow-pitch-glow text-xs pointer-events-none">
+            <div className="absolute top-2 right-4 bg-pitch-darkest border border-orange-500/50 rounded-xl px-3 py-1.5 shadow-pitch-glow text-xs pointer-events-none">
               <span className="font-bold text-white">{activePoint.value} players</span>
               <span className="text-slate-400 ml-1.5">({activePoint.label})</span>
             </div>

@@ -38,8 +38,8 @@ export const SettingsPage: React.FC = () => {
     <div className="space-y-6 animate-in fade-in duration-300">
       {/* Toast Notification */}
       {toastMessage && (
-        <div className="fixed bottom-6 right-6 z-50 p-4 rounded-xl bg-pitch-card border border-emerald-500/50 shadow-pitch-glow text-xs text-white flex items-center gap-2 animate-in slide-in-from-bottom duration-200">
-          <CheckCircle2 className="w-4 h-4 text-emerald-400" />
+        <div className="fixed bottom-6 right-6 z-50 p-4 rounded-xl bg-pitch-card border border-orange-500/50 shadow-pitch-glow text-xs text-white flex items-center gap-2 animate-in slide-in-from-bottom duration-200">
+          <CheckCircle2 className="w-4 h-4 text-orange-400" />
           <span>{toastMessage}</span>
         </div>
       )}
@@ -69,7 +69,7 @@ export const SettingsPage: React.FC = () => {
           {/* General League Config */}
           <Card glow className="space-y-4">
             <h3 className="text-sm font-bold text-white flex items-center gap-2 border-b border-pitch-border pb-3">
-              <Sliders className="w-4 h-4 text-emerald-400" />
+              <Sliders className="w-4 h-4 text-orange-400" />
               Championship Parameters
             </h3>
 
@@ -80,7 +80,7 @@ export const SettingsPage: React.FC = () => {
                   type="text"
                   value={leagueName}
                   onChange={(e) => setLeagueName(e.target.value)}
-                  className="w-full bg-pitch-darker border border-pitch-border rounded-xl px-3.5 py-2 text-white focus:outline-none focus:border-emerald-500"
+                  className="w-full bg-pitch-darker border border-pitch-border rounded-xl px-3.5 py-2 text-white focus:outline-none focus:border-orange-500"
                 />
               </div>
 
@@ -90,7 +90,7 @@ export const SettingsPage: React.FC = () => {
                   type="text"
                   value={seasonCode}
                   onChange={(e) => setSeasonCode(e.target.value)}
-                  className="w-full bg-pitch-darker border border-pitch-border rounded-xl px-3.5 py-2 text-white focus:outline-none focus:border-emerald-500"
+                  className="w-full bg-pitch-darker border border-pitch-border rounded-xl px-3.5 py-2 text-white focus:outline-none focus:border-orange-500"
                 />
               </div>
 
@@ -100,7 +100,7 @@ export const SettingsPage: React.FC = () => {
                   type="number"
                   value={purseCap}
                   onChange={(e) => setPurseCap(e.target.value)}
-                  className="w-full bg-pitch-darker border border-pitch-border rounded-xl px-3.5 py-2 text-white focus:outline-none focus:border-emerald-500 font-mono"
+                  className="w-full bg-pitch-darker border border-pitch-border rounded-xl px-3.5 py-2 text-white focus:outline-none focus:border-orange-500 font-mono"
                 />
               </div>
 
@@ -110,7 +110,7 @@ export const SettingsPage: React.FC = () => {
                   type="number"
                   value={maxSquadSize}
                   onChange={(e) => setMaxSquadSize(e.target.value)}
-                  className="w-full bg-pitch-darker border border-pitch-border rounded-xl px-3.5 py-2 text-white focus:outline-none focus:border-emerald-500 font-mono"
+                  className="w-full bg-pitch-darker border border-pitch-border rounded-xl px-3.5 py-2 text-white focus:outline-none focus:border-orange-500 font-mono"
                 />
               </div>
             </div>
@@ -119,7 +119,7 @@ export const SettingsPage: React.FC = () => {
           {/* Live Auction Rules */}
           <Card glow className="space-y-4">
             <h3 className="text-sm font-bold text-white flex items-center gap-2 border-b border-pitch-border pb-3">
-              <Sliders className="w-4 h-4 text-emerald-400" />
+              <Sliders className="w-4 h-4 text-orange-400" />
               Live Auction Engine Settings (Phase 1 Baseline)
             </h3>
 
@@ -130,7 +130,7 @@ export const SettingsPage: React.FC = () => {
                   type="number"
                   value={minBidIncrement}
                   onChange={(e) => setMinBidIncrement(e.target.value)}
-                  className="w-full bg-pitch-darker border border-pitch-border rounded-xl px-3.5 py-2 text-white focus:outline-none focus:border-emerald-500 font-mono"
+                  className="w-full bg-pitch-darker border border-pitch-border rounded-xl px-3.5 py-2 text-white focus:outline-none focus:border-orange-500 font-mono"
                 />
               </div>
 
@@ -140,7 +140,7 @@ export const SettingsPage: React.FC = () => {
                   type="number"
                   value={hammerCountdown}
                   onChange={(e) => setHammerCountdown(e.target.value)}
-                  className="w-full bg-pitch-darker border border-pitch-border rounded-xl px-3.5 py-2 text-white focus:outline-none focus:border-emerald-500 font-mono"
+                  className="w-full bg-pitch-darker border border-pitch-border rounded-xl px-3.5 py-2 text-white focus:outline-none focus:border-orange-500 font-mono"
                 />
               </div>
             </div>
@@ -152,7 +152,7 @@ export const SettingsPage: React.FC = () => {
           <Card glow className="space-y-4">
             <div className="flex items-center justify-between border-b border-pitch-border pb-3">
               <h3 className="text-sm font-bold text-white flex items-center gap-2">
-                <Server className="w-4 h-4 text-emerald-400" />
+                <Server className="w-4 h-4 text-orange-400" />
                 Backend Telemetry
               </h3>
               <Button
@@ -194,7 +194,7 @@ export const SettingsPage: React.FC = () => {
               <div className="p-3 rounded-xl bg-pitch-darker border border-pitch-border space-y-1">
                 <div className="flex justify-between items-center">
                   <span className="text-slate-400">Process Uptime:</span>
-                  <span className="font-mono text-emerald-400 font-bold">
+                  <span className="font-mono text-orange-400 font-bold">
                     {health?.uptimeSeconds || 0} seconds
                   </span>
                 </div>

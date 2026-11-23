@@ -5,7 +5,7 @@ export const InstructionsCard: React.FC = () => {
   return (
     <div className="rounded-2xl bg-gradient-to-br from-pitch-card to-pitch-darker border border-pitch-border p-6 mb-8">
       <div className="flex items-center gap-2 mb-4">
-        <FileText className="w-4 h-4 text-emerald-400" />
+        <FileText className="w-4 h-4 text-orange-400" />
         <h3 className="text-sm font-bold text-white uppercase tracking-wider">
           Player Registration Instructions & Guidelines
         </h3>
@@ -13,14 +13,14 @@ export const InstructionsCard: React.FC = () => {
 
       <div className="grid grid-cols-1 md:grid-cols-4 gap-4 text-xs">
         <div className="p-3.5 rounded-xl bg-pitch-darker border border-pitch-border/60 space-y-1.5">
-          <div className="flex items-center gap-2 text-emerald-400 font-bold">
-            <span className="w-5 h-5 rounded-full bg-emerald-500/10 border border-emerald-500/30 flex items-center justify-center text-[10px]">
+          <div className="flex items-center gap-2 text-orange-400 font-bold">
+            <span className="w-5 h-5 rounded-full bg-orange-500/10 border border-orange-500/30 flex items-center justify-center text-[10px]">
               1
             </span>
-            <span>6 Required Fields</span>
+            <span>Registration Info</span>
           </div>
           <p className="text-slate-400 leading-relaxed text-[11px]">
-            Provide Full Name, Date of Birth, Phone Number, Email, Playing Position, and a Profile Photo.
+            Provide Full Name, Date of Birth, Phone Number, Playing Position & Photo (Email is optional).
           </p>
         </div>
 

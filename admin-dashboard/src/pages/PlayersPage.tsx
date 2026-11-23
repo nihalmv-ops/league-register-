@@ -210,7 +210,7 @@ export const PlayersPage: React.FC = () => {
       case 'FWD':
         return <Crosshair className="w-3.5 h-3.5 text-rose-400" />;
       case 'MID':
-        return <Compass className="w-3.5 h-3.5 text-emerald-400" />;
+        return <Compass className="w-3.5 h-3.5 text-orange-400" />;
       case 'DEF':
         return <Shield className="w-3.5 h-3.5 text-blue-400" />;
       case 'GK':
@@ -251,7 +251,7 @@ export const PlayersPage: React.FC = () => {
         <div>
           <h2 className="text-xl sm:text-2xl font-black text-white tracking-tight flex items-center gap-2">
             <span>Player Roster & Auction Pool</span>
-            <span className="text-xs font-mono text-emerald-400 bg-emerald-500/10 px-2 py-0.5 rounded-md border border-emerald-500/20">
+            <span className="text-xs font-mono text-orange-400 bg-orange-500/10 px-2 py-0.5 rounded-md border border-orange-500/20">
               {filteredPlayers.length} / {mockPlayers.length} Loaded
             </span>
           </h2>
@@ -266,7 +266,7 @@ export const PlayersPage: React.FC = () => {
             onClick={() => setViewMode('grid')}
             className={`p-1.5 rounded-lg transition-colors ${
               viewMode === 'grid'
-                ? 'bg-emerald-500/20 text-emerald-400'
+                ? 'bg-orange-500/20 text-orange-400'
                 : 'text-slate-400 hover:text-white'
             }`}
             title="Grid view"
@@ -277,7 +277,7 @@ export const PlayersPage: React.FC = () => {
             onClick={() => setViewMode('table')}
             className={`p-1.5 rounded-lg transition-colors ${
               viewMode === 'table'
-                ? 'bg-emerald-500/20 text-emerald-400'
+                ? 'bg-orange-500/20 text-orange-400'
                 : 'text-slate-400 hover:text-white'
             }`}
             title="Table view"
@@ -322,7 +322,7 @@ export const PlayersPage: React.FC = () => {
                 onClick={() => setStatusFilter(st)}
                 className={`px-3 py-1.5 rounded-xl text-xs font-semibold capitalize whitespace-nowrap transition-colors ${
                   statusFilter === st
-                    ? 'bg-pitch-card text-emerald-400 border border-emerald-500/40'
+                    ? 'bg-pitch-card text-orange-400 border border-orange-500/40'
                     : 'bg-pitch-darker text-slate-400 hover:text-white border border-pitch-border'
                 }`}
               >
@@ -362,7 +362,7 @@ export const PlayersPage: React.FC = () => {
                 {/* Card Top: Overall Rating & Tier */}
                 <div className="flex items-start justify-between mb-3">
                   <div className="flex items-center gap-2">
-                    <div className="w-9 h-9 rounded-xl bg-pitch-darker border border-pitch-border flex items-center justify-center font-black text-sm text-emerald-400 group-hover:border-emerald-500/50 group-hover:shadow-pitch-glow transition-all">
+                    <div className="w-9 h-9 rounded-xl bg-pitch-darker border border-pitch-border flex items-center justify-center font-black text-sm text-orange-400 group-hover:border-orange-500/50 group-hover:shadow-pitch-glow transition-all">
                       {player.overallRating}
                     </div>
                     <div>
@@ -379,7 +379,7 @@ export const PlayersPage: React.FC = () => {
                 </div>
 
                 {/* Player Name and Club */}
-                <h3 className="text-base font-extrabold text-white group-hover:text-emerald-400 transition-colors truncate">
+                <h3 className="text-base font-extrabold text-white group-hover:text-orange-400 transition-colors truncate">
                   {player.name}
                 </h3>
                 <p className="text-xs text-slate-400 truncate">
@@ -421,7 +421,7 @@ export const PlayersPage: React.FC = () => {
                   <span className="text-[10px] text-slate-400 block">
                     {player.auctionStatus === 'sold' ? 'Sold Price' : 'Base Price'}
                   </span>
-                  <span className="font-mono font-bold text-emerald-400">
+                  <span className="font-mono font-bold text-orange-400">
                     ${(player.soldPrice || player.basePrice).toLocaleString()}
                   </span>
                 </div>
@@ -477,7 +477,7 @@ export const PlayersPage: React.FC = () => {
                       </div>
                     </td>
                     <td className="py-3 px-4">
-                      <span className="font-extrabold text-emerald-400 font-mono">
+                      <span className="font-extrabold text-orange-400 font-mono">
                         {player.overallRating}
                       </span>
                     </td>
@@ -485,7 +485,7 @@ export const PlayersPage: React.FC = () => {
                     <td className="py-3 px-4 font-mono text-slate-300">
                       ${player.basePrice.toLocaleString()}
                     </td>
-                    <td className="py-3 px-4 font-mono font-bold text-emerald-400">
+                    <td className="py-3 px-4 font-mono font-bold text-orange-400">
                       {player.soldPrice ? `$${player.soldPrice.toLocaleString()}` : '-'}
                     </td>
                     <td className="py-3 px-4">
@@ -534,7 +534,7 @@ export const PlayersPage: React.FC = () => {
             {/* Header profile highlights */}
             <div className="flex items-center justify-between p-4 rounded-xl bg-pitch-dark border border-pitch-border">
               <div className="flex items-center gap-3">
-                <div className="w-12 h-12 rounded-xl bg-emerald-500/10 border border-emerald-500/30 flex items-center justify-center font-black text-xl text-emerald-400 shadow-pitch-glow">
+                <div className="w-12 h-12 rounded-xl bg-orange-500/10 border border-orange-500/30 flex items-center justify-center font-black text-xl text-orange-400 shadow-pitch-glow">
                   {selectedPlayer.overallRating}
                 </div>
                 <div>
@@ -560,7 +560,7 @@ export const PlayersPage: React.FC = () => {
               </div>
               <div className="p-3 rounded-xl bg-pitch-card border border-pitch-border">
                 <span className="text-slate-400 text-[11px] block">Drafted / Sold Value</span>
-                <span className="text-base font-extrabold text-emerald-400 font-mono">
+                <span className="text-base font-extrabold text-orange-400 font-mono">
                   {selectedPlayer.soldPrice
                     ? `$${selectedPlayer.soldPrice.toLocaleString()}`
                     : 'Awaiting Auction Stage'}
@@ -586,7 +586,7 @@ export const PlayersPage: React.FC = () => {
                       <span className="font-bold text-white font-mono">{val}</span>
                       <div className="w-16 h-1.5 rounded-full bg-slate-800 overflow-hidden">
                         <div
-                          className="h-full bg-emerald-500 rounded-full"
+                          className="h-full bg-orange-500 rounded-full"
                           style={{ width: `${val}%` }}
                         />
                       </div>
@@ -604,7 +604,7 @@ export const PlayersPage: React.FC = () => {
               </div>
               <div>
                 <span className="text-slate-400 text-[10px] block">Goals</span>
-                <span className="font-bold text-emerald-400 text-sm">{selectedPlayer.goals}</span>
+                <span className="font-bold text-orange-400 text-sm">{selectedPlayer.goals}</span>
               </div>
               <div>
                 <span className="text-slate-400 text-[10px] block">Assists</span>

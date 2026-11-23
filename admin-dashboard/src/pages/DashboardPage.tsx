@@ -93,7 +93,7 @@ export const DashboardPage: React.FC = () => {
       <div className="p-4 sm:p-5 rounded-2xl bg-gradient-to-r from-pitch-card via-pitch-cardHover to-slate-900 border border-pitch-border flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
         <div>
           <div className="flex items-center gap-2">
-            <span className="text-xs font-bold text-emerald-400 uppercase tracking-wider">
+            <span className="text-xs font-bold text-orange-400 uppercase tracking-wider">
               Season 2026-27 Management Command Center
             </span>
           </div>

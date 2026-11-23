@@ -37,7 +37,7 @@ export const RecentActivityFeed: React.FC<RecentActivityFeedProps> = ({ activiti
         <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2 mb-4">
           <div>
             <h3 className="text-sm font-bold text-white tracking-tight flex items-center gap-2">
-              <span className="w-2 h-2 rounded-full bg-emerald-400" />
+              <span className="w-2 h-2 rounded-full bg-orange-400" />
               Recent League Activity
             </h3>
             <p className="text-xs text-slate-400 mt-0.5">
@@ -51,7 +51,7 @@ export const RecentActivityFeed: React.FC<RecentActivityFeedProps> = ({ activiti
               onClick={() => setFilter('all')}
               className={`px-2.5 py-1 rounded-lg font-medium transition-colors ${
                 filter === 'all'
-                  ? 'bg-emerald-500/20 text-emerald-400 font-bold'
+                  ? 'bg-orange-500/20 text-orange-400 font-bold'
                   : 'text-slate-400 hover:text-slate-200'
               }`}
             >
@@ -102,13 +102,13 @@ export const RecentActivityFeed: React.FC<RecentActivityFeedProps> = ({ activiti
                 key={act.id}
                 className="p-3 rounded-xl bg-pitch-darker/60 hover:bg-pitch-card transition-colors border border-pitch-border/50 flex items-start gap-3.5 group"
               >
-                <div className="w-8 h-8 rounded-xl bg-pitch-dark border border-pitch-border flex items-center justify-center shrink-0 mt-0.5 group-hover:border-emerald-500/30 transition-colors">
+                <div className="w-8 h-8 rounded-xl bg-pitch-dark border border-pitch-border flex items-center justify-center shrink-0 mt-0.5 group-hover:border-orange-500/30 transition-colors">
                   {typeIcons[act.type] || <Filter className="w-4 h-4 text-slate-400" />}
                 </div>
 
                 <div className="flex-1 min-w-0">
                   <div className="flex items-center justify-between gap-2">
-                    <h5 className="text-xs font-bold text-slate-100 group-hover:text-emerald-400 transition-colors truncate">
+                    <h5 className="text-xs font-bold text-slate-100 group-hover:text-orange-400 transition-colors truncate">
                       {act.title}
                     </h5>
                     <span className="text-[10px] text-slate-400 font-mono shrink-0">

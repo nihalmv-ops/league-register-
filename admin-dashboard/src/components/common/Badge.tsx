@@ -1,6 +1,6 @@
 import React from 'react';
 
-export type BadgeVariant = 'green' | 'blue' | 'yellow' | 'red' | 'purple' | 'slate' | 'outline';
+export type BadgeVariant = 'green' | 'orange' | 'blue' | 'yellow' | 'red' | 'purple' | 'slate' | 'outline';
 export type BadgeSize = 'sm' | 'md' | 'lg';
 
 interface BadgeProps {
@@ -13,6 +13,7 @@ interface BadgeProps {
 
 const variantStyles: Record<BadgeVariant, string> = {
   green: 'bg-emerald-950/70 text-emerald-400 border border-emerald-500/30',
+  orange: 'bg-orange-950/70 text-orange-400 border border-orange-500/30',
   blue: 'bg-blue-950/70 text-blue-400 border border-blue-500/30',
   yellow: 'bg-amber-950/70 text-amber-400 border border-amber-500/30',
   red: 'bg-rose-950/70 text-rose-400 border border-rose-500/30',
@@ -23,6 +24,7 @@ const variantStyles: Record<BadgeVariant, string> = {
 
 const dotColors: Record<BadgeVariant, string> = {
   green: 'bg-emerald-400',
+  orange: 'bg-orange-400',
   blue: 'bg-blue-400',
   yellow: 'bg-amber-400',
   red: 'bg-rose-400',

@@ -21,7 +21,7 @@ interface SuccessViewProps {
 const positionIcons: Record<PlayingPosition, React.ReactNode> = {
   Goalkeeper: <ShieldAlert className="w-4 h-4 text-amber-400" />,
   Defender: <Shield className="w-4 h-4 text-blue-400" />,
-  Midfielder: <Compass className="w-4 h-4 text-emerald-400" />,
+  Midfielder: <Compass className="w-4 h-4 text-orange-400" />,
   Forward: <Crosshair className="w-4 h-4 text-rose-400" />,
 };
 
@@ -41,15 +41,15 @@ export const SuccessView: React.FC<SuccessViewProps> = ({
   return (
     <div className="max-w-2xl mx-auto space-y-6 animate-in zoom-in-95 duration-300">
       {/* Success Hero Card */}
-      <div className="bg-pitch-card border border-emerald-500/50 rounded-3xl p-6 sm:p-10 text-center shadow-pitch-glow-lg relative overflow-hidden">
+      <div className="bg-pitch-card border border-orange-500/50 rounded-3xl p-6 sm:p-10 text-center shadow-pitch-glow-lg relative overflow-hidden">
         {/* Subtle background glow */}
-        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-48 h-24 bg-emerald-500/20 blur-3xl pointer-events-none" />
+        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-48 h-24 bg-orange-500/20 blur-3xl pointer-events-none" />
 
-        <div className="w-16 h-16 rounded-3xl bg-emerald-500/10 border-2 border-emerald-500/40 text-emerald-400 flex items-center justify-center mx-auto mb-4 shadow-pitch-glow">
+        <div className="w-16 h-16 rounded-3xl bg-orange-500/10 border-2 border-orange-500/40 text-orange-400 flex items-center justify-center mx-auto mb-4 shadow-pitch-glow">
           <CheckCircle2 className="w-9 h-9" />
         </div>
 
-        <span className="inline-block text-[11px] font-black uppercase tracking-widest text-emerald-400 bg-emerald-500/10 px-3 py-1 rounded-full border border-emerald-500/30 mb-2">
+        <span className="inline-block text-[11px] font-black uppercase tracking-widest text-orange-400 bg-orange-500/10 px-3 py-1 rounded-full border border-orange-500/30 mb-2">
           APPLICATION SUBMITTED SUCCESSFULLY
         </span>
 
@@ -68,7 +68,7 @@ export const SuccessView: React.FC<SuccessViewProps> = ({
             <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider block">
               Official Registration ID (Save This)
             </span>
-            <span className="text-xl sm:text-2xl font-black text-emerald-400 font-mono tracking-wider">
+            <span className="text-xl sm:text-2xl font-black text-orange-400 font-mono tracking-wider">
               {data.registrationId}
             </span>
           </div>
@@ -79,8 +79,8 @@ export const SuccessView: React.FC<SuccessViewProps> = ({
           >
             {copied ? (
               <>
-                <CheckCircle2 className="w-4 h-4 text-emerald-400" />
-                <span className="text-emerald-400">Copied!</span>
+                <CheckCircle2 className="w-4 h-4 text-orange-400" />
+                <span className="text-orange-400">Copied!</span>
               </>
             ) : (
               <>
@@ -93,7 +93,7 @@ export const SuccessView: React.FC<SuccessViewProps> = ({
 
         {/* Player Snapshot Card */}
         <div className="p-4 rounded-2xl bg-pitch-darker/60 border border-pitch-border/60 flex items-center gap-4 text-left">
-          <div className="w-16 h-16 rounded-2xl overflow-hidden border-2 border-emerald-500/30 shrink-0 bg-slate-900">
+          <div className="w-16 h-16 rounded-2xl overflow-hidden border-2 border-orange-500/30 shrink-0 bg-slate-900">
             <img
               src={data.photoUrl}
               alt={data.fullName}
@@ -122,7 +122,7 @@ export const SuccessView: React.FC<SuccessViewProps> = ({
                 {data.playingPosition}
               </span>
               <span>•</span>
-              <span className="truncate">{data.email}</span>
+              <span className="truncate">{data.email || 'No email provided'}</span>
             </div>
           </div>
         </div>
@@ -134,7 +134,7 @@ export const SuccessView: React.FC<SuccessViewProps> = ({
           </h4>
           <div className="space-y-2 text-xs text-slate-400">
             <div className="flex items-start gap-2">
-              <span className="w-4 h-4 rounded-full bg-emerald-500/20 text-emerald-400 flex items-center justify-center font-bold text-[10px] shrink-0 mt-0.5">
+              <span className="w-4 h-4 rounded-full bg-orange-500/20 text-orange-400 flex items-center justify-center font-bold text-[10px] shrink-0 mt-0.5">
                 ✓
               </span>
               <span>

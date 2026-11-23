@@ -15,7 +15,7 @@ export const DashboardLayout: React.FC = () => {
   const dbStatus = health?.database?.status || 'disconnected';
 
   return (
-    <div className="min-h-screen bg-pitch-darkest text-slate-100 flex flex-col pitch-pattern selection:bg-emerald-500 selection:text-black">
+    <div className="min-h-screen bg-pitch-darkest text-slate-100 flex flex-col pitch-pattern selection:bg-orange-500 selection:text-black">
       {/* Sidebar (Desktop and Mobile) */}
       <Sidebar
         collapsed={collapsed}
@@ -55,7 +55,7 @@ export const DashboardLayout: React.FC = () => {
             <div className="flex items-center gap-3 text-slate-400">
               <span>MERN Stack + TypeScript</span>
               <span>•</span>
-              <span className="text-emerald-400 font-mono">v1.0.0-phase1</span>
+              <span className="text-orange-400 font-mono">v1.0.0-phase1</span>
             </div>
           </div>
         </footer>

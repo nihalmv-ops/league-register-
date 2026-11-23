@@ -13,19 +13,19 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
   return (
     <section className="relative overflow-hidden pt-8 pb-12 sm:pt-14 sm:pb-16 text-center">
       {/* Background radial glow */}
-      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[350px] bg-emerald-500/10 blur-[120px] rounded-full pointer-events-none" />
+      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[350px] bg-orange-500/10 blur-[120px] rounded-full pointer-events-none" />
 
       <div className="relative z-10 max-w-4xl mx-auto px-4">
         {/* Open Status Chip */}
-        <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-emerald-500/10 border border-emerald-500/30 text-emerald-400 text-xs font-bold mb-6 shadow-pitch-glow">
-          <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
+        <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-orange-500/10 border border-orange-500/30 text-orange-400 text-xs font-bold mb-6 shadow-pitch-glow">
+          <span className="w-2 h-2 rounded-full bg-orange-400 animate-pulse" />
           <span>OFFICIAL LEAGUE REGISTRATION WINDOW: 2026-27</span>
         </div>
 
         {/* Hero Title */}
         <h1 className="text-3xl sm:text-5xl lg:text-6xl font-black text-white tracking-tight leading-[1.1] mb-5">
           Enter The Pitch.{' '}
-          <span className="text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 via-teal-300 to-green-500">
+          <span className="text-transparent bg-clip-text bg-gradient-to-r from-orange-400 via-amber-300 to-orange-500">
             Get Drafted in Live Auction.
           </span>
         </h1>
@@ -56,7 +56,7 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
         {/* Feature Pills */}
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 text-left">
           <div className="p-4 rounded-2xl bg-pitch-card/70 border border-pitch-border backdrop-blur-sm flex items-start gap-3">
-            <div className="p-2 rounded-xl bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 shrink-0">
+            <div className="p-2 rounded-xl bg-orange-500/10 text-orange-400 border border-orange-500/20 shrink-0">
               <Trophy className="w-5 h-5" />
             </div>
             <div>

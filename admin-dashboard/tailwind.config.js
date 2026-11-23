@@ -9,29 +9,29 @@ export default {
     extend: {
       colors: {
         pitch: {
-          darkest: '#080c14',
-          darker: '#0d131f',
-          dark: '#131b2c',
-          card: '#162033',
-          cardHover: '#1c2940',
-          border: '#24344d',
-          borderSubtle: '#1a273b',
-          muted: '#94a3b8',
+          darkest: '#09090b',     // Deepest pitch black
+          darker: '#0f0f14',      // Onyx dark background
+          dark: '#15151e',        // Elevated dark surface
+          card: '#1c1c26',        // Dark stadium card
+          cardHover: '#242432',   // Card hover surface
+          border: '#333345',      // Clean dark border
+          borderSubtle: '#222230',// Subtle dividers
+          muted: '#9ca3af',       // Muted text
         },
         football: {
-          accent: '#10b981',       // Vibrant pitch emerald
-          accentHover: '#059669',  // Darker emerald
-          glow: '#34d399',         // Glow highlight
-          neon: '#22c55e',         // Neon grass green
-          gold: '#eab308',         // Trophy gold
+          accent: '#f97316',       // Vibrant stadium blaze orange
+          accentHover: '#ea580c',  // Rich deep orange
+          glow: '#fb923c',         // Orange glow highlight
+          neon: '#ff7700',         // High-vis electric orange
+          gold: '#f59e0b',         // Trophy gold
           red: '#ef4444',          // Red card / danger
-          blue: '#3b82f6',         // Info / Team badge
+          blue: '#3b82f6',         // Team badge blue
         }
       },
       boxShadow: {
-        'pitch-glow': '0 0 20px -5px rgba(16, 185, 129, 0.25)',
-        'pitch-glow-lg': '0 0 35px -5px rgba(16, 185, 129, 0.35)',
-        'card-dark': '0 4px 20px -2px rgba(0, 0, 0, 0.5)',
+        'pitch-glow': '0 0 20px -4px rgba(249, 115, 22, 0.35)',
+        'pitch-glow-lg': '0 0 35px -5px rgba(249, 115, 22, 0.5)',
+        'card-dark': '0 4px 20px -2px rgba(0, 0, 0, 0.7)',
       },
       fontFamily: {
         sans: ['Inter', 'system-ui', '-apple-system', 'sans-serif'],

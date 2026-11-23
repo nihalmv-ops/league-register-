@@ -21,7 +21,7 @@ interface StatusCheckerProps {
 const positionIcons: Record<PlayingPosition, React.ReactNode> = {
   Goalkeeper: <ShieldAlert className="w-4 h-4 text-amber-400" />,
   Defender: <Shield className="w-4 h-4 text-blue-400" />,
-  Midfielder: <Compass className="w-4 h-4 text-emerald-400" />,
+  Midfielder: <Compass className="w-4 h-4 text-orange-400" />,
   Forward: <Crosshair className="w-4 h-4 text-rose-400" />,
 };
 
@@ -74,7 +74,7 @@ export const StatusChecker: React.FC<StatusCheckerProps> = ({
       <div className="bg-pitch-card border border-pitch-border rounded-3xl p-6 sm:p-8 shadow-2xl space-y-5">
         <div>
           <h3 className="text-xl font-black text-white tracking-tight flex items-center gap-2">
-            <Search className="w-5 h-5 text-emerald-400" />
+            <Search className="w-5 h-5 text-orange-400" />
             Check Player Application Status
           </h3>
           <p className="text-xs sm:text-sm text-slate-400 mt-1">
@@ -93,7 +93,7 @@ export const StatusChecker: React.FC<StatusCheckerProps> = ({
                 if (e.key === 'Enter') handleSearch();
               }}
               placeholder="e.g. PLR-2026-123456 or player@example.com"
-              className="w-full bg-pitch-darker border border-pitch-border rounded-xl px-4 py-3 text-sm text-white placeholder-slate-500 focus:outline-none focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500/40 font-mono transition-all"
+              className="w-full bg-pitch-darker border border-pitch-border rounded-xl px-4 py-3 text-sm text-white placeholder-slate-500 focus:outline-none focus:border-orange-500 focus:ring-1 focus:ring-orange-500/40 font-mono transition-all"
             />
           </div>
 
@@ -129,7 +129,7 @@ export const StatusChecker: React.FC<StatusCheckerProps> = ({
               <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider block">
                 Registration Reference
               </span>
-              <span className="text-lg font-black text-emerald-400 font-mono">
+              <span className="text-lg font-black text-orange-400 font-mono">
                 {statusData.registrationId}
               </span>
             </div>

@@ -28,7 +28,7 @@ export const LiveAuctionPage: React.FC = () => {
   return (
     <div className="space-y-6 animate-in fade-in duration-300">
       {/* Live Stage Banner */}
-      <div className="p-4 sm:p-6 rounded-2xl bg-gradient-to-r from-emerald-950/60 via-pitch-card to-slate-900 border border-emerald-500/40 shadow-pitch-glow flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
+      <div className="p-4 sm:p-6 rounded-2xl bg-gradient-to-r from-orange-950/60 via-pitch-card to-slate-900 border border-orange-500/40 shadow-pitch-glow flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
         <div>
           <div className="flex items-center gap-2 flex-wrap mb-1">
             <span className="inline-flex items-center gap-1.5 text-xs font-bold px-2.5 py-0.5 rounded-full bg-rose-500/20 text-rose-400 border border-rose-500/30 animate-pulse">
@@ -101,8 +101,8 @@ export const LiveAuctionPage: React.FC = () => {
           <Card glow className="lg:col-span-2 space-y-6">
             <div className="flex items-center justify-between border-b border-pitch-border pb-4">
               <div className="flex items-center gap-2">
-                <span className="w-3 h-3 rounded-full bg-emerald-400 animate-ping" />
-                <span className="text-xs font-bold uppercase text-emerald-400 tracking-wider">
+                <span className="w-3 h-3 rounded-full bg-orange-400 animate-ping" />
+                <span className="text-xs font-bold uppercase text-orange-400 tracking-wider">
                   Currently On Bidding Podium • Lot #1
                 </span>
               </div>
@@ -114,7 +114,7 @@ export const LiveAuctionPage: React.FC = () => {
 
             {/* Spotlight Player Showcase */}
             <div className="flex flex-col sm:flex-row items-center gap-6 p-6 rounded-2xl bg-gradient-to-br from-pitch-darker via-pitch-card to-slate-900 border border-pitch-border">
-              <div className="w-24 h-24 rounded-2xl bg-emerald-500/10 border-2 border-emerald-500/40 flex flex-col items-center justify-center font-black text-3xl text-emerald-400 shadow-pitch-glow shrink-0">
+              <div className="w-24 h-24 rounded-2xl bg-orange-500/10 border-2 border-orange-500/40 flex flex-col items-center justify-center font-black text-3xl text-orange-400 shadow-pitch-glow shrink-0">
                 <span>88</span>
                 <span className="text-[10px] uppercase font-bold tracking-widest text-slate-400">
                   FWD
@@ -163,9 +163,9 @@ export const LiveAuctionPage: React.FC = () => {
                 </span>
               </div>
 
-              <div className="p-4 rounded-xl bg-gradient-to-r from-emerald-950/60 to-pitch-darker border border-emerald-500/40">
+              <div className="p-4 rounded-xl bg-gradient-to-r from-orange-950/60 to-pitch-darker border border-orange-500/40">
                 <div className="flex justify-between items-start mb-1">
-                  <span className="text-xs text-emerald-400 font-bold">
+                  <span className="text-xs text-orange-400 font-bold">
                     Current Highest Bid
                   </span>
                   <Badge variant="green" size="sm" dot>
@@ -176,7 +176,7 @@ export const LiveAuctionPage: React.FC = () => {
                   ${simulatedBid.toLocaleString()}
                 </span>
                 <span className="text-xs text-slate-300 block mt-1">
-                  Held by: <strong className="text-emerald-400">{lastBidTeam}</strong>
+                  Held by: <strong className="text-orange-400">{lastBidTeam}</strong>
                 </span>
               </div>
             </div>
@@ -232,23 +232,23 @@ export const LiveAuctionPage: React.FC = () => {
           <Card glow className="space-y-4">
             <div className="flex items-center justify-between border-b border-pitch-border pb-3">
               <h4 className="text-sm font-bold text-white flex items-center gap-2">
-                <TrendingUp className="w-4 h-4 text-emerald-400" />
+                <TrendingUp className="w-4 h-4 text-orange-400" />
                 Live Bidding Activity
               </h4>
-              <span className="text-[10px] font-mono text-emerald-400">WebSocket Ready</span>
+              <span className="text-[10px] font-mono text-orange-400">WebSocket Ready</span>
             </div>
 
             <div className="space-y-2.5 text-xs">
-              <div className="p-3 rounded-xl bg-emerald-950/30 border border-emerald-500/30 flex justify-between items-center">
+              <div className="p-3 rounded-xl bg-orange-950/30 border border-orange-500/30 flex justify-between items-center">
                 <div>
                   <div className="font-bold text-white">{lastBidTeam}</div>
                   <div className="text-[10px] text-slate-400">Just now • Paddle #04</div>
                 </div>
                 <div className="text-right">
-                  <div className="font-mono font-bold text-emerald-400">
+                  <div className="font-mono font-bold text-orange-400">
                     ${simulatedBid.toLocaleString()}
                   </div>
-                  <span className="text-[9px] text-emerald-400">Highest Bidder</span>
+                  <span className="text-[9px] text-orange-400">Highest Bidder</span>
                 </div>
               </div>
 
@@ -307,12 +307,12 @@ export const LiveAuctionPage: React.FC = () => {
             <tbody className="divide-y divide-pitch-border/50">
               {upcomingQueue.map((item) => (
                 <tr key={item.lot} className="hover:bg-pitch-cardHover transition-colors">
-                  <td className="py-3.5 px-4 font-mono font-bold text-emerald-400">
+                  <td className="py-3.5 px-4 font-mono font-bold text-orange-400">
                     #{item.lot}
                   </td>
                   <td className="py-3.5 px-4 font-bold text-white">{item.name}</td>
                   <td className="py-3.5 px-4 font-semibold text-slate-300">{item.position}</td>
-                  <td className="py-3.5 px-4 font-mono font-black text-emerald-400">
+                  <td className="py-3.5 px-4 font-mono font-black text-orange-400">
                     {item.rating}
                   </td>
                   <td className="py-3.5 px-4 font-mono text-slate-300">
@@ -344,28 +344,28 @@ export const LiveAuctionPage: React.FC = () => {
           </h4>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs">
             <div className="p-4 rounded-xl bg-pitch-darker border border-pitch-border space-y-2">
-              <h5 className="font-bold text-emerald-400">1. Franchise Purse Ceiling</h5>
+              <h5 className="font-bold text-orange-400">1. Franchise Purse Ceiling</h5>
               <p className="text-slate-300 leading-relaxed">
                 Every franchise starts with a strict purse ceiling of $1,500,000. Bids exceeding
                 the remaining available balance will be automatically rejected by the engine.
               </p>
             </div>
             <div className="p-4 rounded-xl bg-pitch-darker border border-pitch-border space-y-2">
-              <h5 className="font-bold text-emerald-400">2. Squad Composition Limits</h5>
+              <h5 className="font-bold text-orange-400">2. Squad Composition Limits</h5>
               <p className="text-slate-300 leading-relaxed">
                 Franchises must draft a minimum of 11 players and a maximum of 15 players.
                 Each roster must include at least 2 Goalkeepers, 4 Defenders, 4 Midfielders, and 2 Forwards.
               </p>
             </div>
             <div className="p-4 rounded-xl bg-pitch-darker border border-pitch-border space-y-2">
-              <h5 className="font-bold text-emerald-400">3. Hammer Countdown Rule</h5>
+              <h5 className="font-bold text-orange-400">3. Hammer Countdown Rule</h5>
               <p className="text-slate-300 leading-relaxed">
                 When a new bid is placed, the timer resets to 30 seconds. If no opposing bid is made
                 within the countdown, the player is awarded to the highest bidder at the sound of the third gavel.
               </p>
             </div>
             <div className="p-4 rounded-xl bg-pitch-darker border border-pitch-border space-y-2">
-              <h5 className="font-bold text-emerald-400">4. Unsold Players</h5>
+              <h5 className="font-bold text-orange-400">4. Unsold Players</h5>
               <p className="text-slate-300 leading-relaxed">
                 Players with zero bids at base price are entered into the Accelerated Re-Auction Pool
                 at the conclusion of the primary draft round with base price reduced by 25%.

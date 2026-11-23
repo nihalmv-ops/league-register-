@@ -8,11 +8,11 @@ export const NotFoundPage: React.FC = () => {
 
   return (
     <div className="min-h-[70vh] flex flex-col items-center justify-center text-center p-6 animate-in zoom-in-95 duration-200">
-      <div className="w-20 h-20 rounded-3xl bg-emerald-500/10 border-2 border-emerald-500/30 text-emerald-400 flex items-center justify-center text-4xl mb-6 shadow-pitch-glow">
+      <div className="w-20 h-20 rounded-3xl bg-orange-500/10 border-2 border-orange-500/30 text-orange-400 flex items-center justify-center text-4xl mb-6 shadow-pitch-glow">
         ⚽
       </div>
 
-      <span className="text-xs font-mono font-bold uppercase tracking-widest text-emerald-400 bg-emerald-500/10 px-3 py-1 rounded-full border border-emerald-500/20 mb-3">
+      <span className="text-xs font-mono font-bold uppercase tracking-widest text-orange-400 bg-orange-500/10 px-3 py-1 rounded-full border border-orange-500/20 mb-3">
         Referee Whistle: Out of Bounds
       </span>
 

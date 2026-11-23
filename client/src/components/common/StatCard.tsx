@@ -1,7 +1,7 @@
 import React from 'react';
 import { LucideIcon, TrendingUp, TrendingDown } from 'lucide-react';
 
-export type StatColor = 'green' | 'blue' | 'yellow' | 'red' | 'purple';
+export type StatColor = 'orange' | 'green' | 'blue' | 'yellow' | 'red' | 'purple';
 
 interface StatCardProps {
   title: string;
@@ -29,6 +29,13 @@ const colorVariants: Record<
     textHighlight: string;
   }
 > = {
+  orange: {
+    iconBg: 'bg-orange-500/10',
+    iconColor: 'text-orange-400',
+    border: 'border-orange-500/20 hover:border-orange-500/40',
+    accentGlow: 'hover:shadow-[0_0_20px_-3px_rgba(249,115,22,0.35)]',
+    textHighlight: 'text-orange-400',
+  },
   green: {
     iconBg: 'bg-emerald-500/10',
     iconColor: 'text-emerald-400',
@@ -71,13 +78,13 @@ export const StatCard: React.FC<StatCardProps> = ({
   value,
   subtitle,
   icon: Icon,
-  color = 'green',
+  color = 'orange',
   trend,
   badge,
   onClick,
   className = '',
 }) => {
-  const styles = colorVariants[color];
+  const styles = colorVariants[color] || colorVariants.orange;
 
   return (
     <div
@@ -87,7 +94,7 @@ export const StatCard: React.FC<StatCardProps> = ({
       } ${className}`}
     >
       {/* Subtle top indicator bar */}
-      <div className={`absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-transparent via-${color === 'green' ? 'emerald-500' : color === 'blue' ? 'blue-500' : color === 'yellow' ? 'amber-500' : color === 'red' ? 'rose-500' : 'purple-500'}/60 to-transparent opacity-60`} />
+      <div className={`absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-transparent via-${color === 'orange' ? 'orange-500' : color === 'green' ? 'emerald-500' : color === 'blue' ? 'blue-500' : color === 'yellow' ? 'amber-500' : color === 'red' ? 'rose-500' : 'purple-500'}/60 to-transparent opacity-60`} />
 
       <div className="flex items-start justify-between">
         <div className="space-y-1">

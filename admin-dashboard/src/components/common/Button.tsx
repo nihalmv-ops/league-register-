@@ -18,7 +18,7 @@ const variantClasses: Record<ButtonVariant, string> = {
   secondary:
     'bg-pitch-dark hover:bg-pitch-card border border-pitch-border text-slate-200 hover:text-white focus:ring-2 focus:ring-slate-600',
   outline:
-    'bg-transparent hover:bg-emerald-950/20 border border-football-accent/40 hover:border-football-accent text-emerald-400 hover:text-emerald-300 focus:ring-2 focus:ring-football-accent/40',
+    'bg-transparent hover:bg-orange-950/20 border border-football-accent/40 hover:border-football-accent text-orange-400 hover:text-orange-300 focus:ring-2 focus:ring-football-accent/40',
   danger:
     'bg-rose-600 hover:bg-rose-700 text-white shadow-sm focus:ring-2 focus:ring-rose-500/50',
   ghost:

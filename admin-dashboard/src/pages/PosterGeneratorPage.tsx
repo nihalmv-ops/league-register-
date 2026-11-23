@@ -41,8 +41,8 @@ export const PosterGeneratorPage: React.FC = () => {
     <div className="space-y-6 animate-in fade-in duration-300">
       {/* Toast Notification */}
       {toastMessage && (
-        <div className="fixed bottom-6 right-6 z-50 p-4 rounded-xl bg-pitch-card border border-emerald-500/50 shadow-pitch-glow text-xs text-white flex items-center gap-2 animate-in slide-in-from-bottom duration-200">
-          <CheckCircle2 className="w-4 h-4 text-emerald-400" />
+        <div className="fixed bottom-6 right-6 z-50 p-4 rounded-xl bg-pitch-card border border-orange-500/50 shadow-pitch-glow text-xs text-white flex items-center gap-2 animate-in slide-in-from-bottom duration-200">
+          <CheckCircle2 className="w-4 h-4 text-orange-400" />
           <span>{toastMessage}</span>
         </div>
       )}
@@ -52,7 +52,7 @@ export const PosterGeneratorPage: React.FC = () => {
         <div>
           <h2 className="text-xl sm:text-2xl font-black text-white tracking-tight flex items-center gap-2">
             <span>Team & Matchday Poster Studio</span>
-            <span className="text-xs font-mono text-emerald-400 bg-emerald-500/10 px-2 py-0.5 rounded-md border border-emerald-500/20">
+            <span className="text-xs font-mono text-orange-400 bg-orange-500/10 px-2 py-0.5 rounded-md border border-orange-500/20">
               Interactive Designer
             </span>
           </h2>
@@ -76,7 +76,7 @@ export const PosterGeneratorPage: React.FC = () => {
         {/* Left Column: Form Controls (5 cols) */}
         <Card glow className="lg:col-span-5 space-y-4">
           <h3 className="text-sm font-bold text-white border-b border-pitch-border pb-3 flex items-center gap-2">
-            <Sparkles className="w-4 h-4 text-emerald-400" />
+            <Sparkles className="w-4 h-4 text-orange-400" />
             Poster Configuration
           </h3>
 
@@ -111,7 +111,7 @@ export const PosterGeneratorPage: React.FC = () => {
               type="text"
               value={headline}
               onChange={(e) => setHeadline(e.target.value)}
-              className="w-full bg-pitch-darker border border-pitch-border rounded-xl px-3.5 py-2 text-xs text-white focus:outline-none focus:border-emerald-500"
+              className="w-full bg-pitch-darker border border-pitch-border rounded-xl px-3.5 py-2 text-xs text-white focus:outline-none focus:border-orange-500"
             />
           </div>
 
@@ -122,7 +122,7 @@ export const PosterGeneratorPage: React.FC = () => {
               <select
                 value={homeTeam}
                 onChange={(e) => setHomeTeam(e.target.value)}
-                className="w-full bg-pitch-darker border border-pitch-border rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-emerald-500"
+                className="w-full bg-pitch-darker border border-pitch-border rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-orange-500"
               >
                 <option>Thunder Strikers FC</option>
                 <option>Apex Predators</option>
@@ -138,7 +138,7 @@ export const PosterGeneratorPage: React.FC = () => {
               <select
                 value={awayTeam}
                 onChange={(e) => setAwayTeam(e.target.value)}
-                className="w-full bg-pitch-darker border border-pitch-border rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-emerald-500"
+                className="w-full bg-pitch-darker border border-pitch-border rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-orange-500"
               >
                 <option>Apex Predators</option>
                 <option>Thunder Strikers FC</option>
@@ -158,7 +158,7 @@ export const PosterGeneratorPage: React.FC = () => {
                 type="text"
                 value={matchDate}
                 onChange={(e) => setMatchDate(e.target.value)}
-                className="w-full bg-pitch-darker border border-pitch-border rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-emerald-500"
+                className="w-full bg-pitch-darker border border-pitch-border rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-orange-500"
               />
             </div>
             <div className="space-y-1.5">
@@ -167,7 +167,7 @@ export const PosterGeneratorPage: React.FC = () => {
                 type="text"
                 value={matchTime}
                 onChange={(e) => setMatchTime(e.target.value)}
-                className="w-full bg-pitch-darker border border-pitch-border rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-emerald-500"
+                className="w-full bg-pitch-darker border border-pitch-border rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-orange-500"
               />
             </div>
           </div>
@@ -179,7 +179,7 @@ export const PosterGeneratorPage: React.FC = () => {
               type="text"
               value={venue}
               onChange={(e) => setVenue(e.target.value)}
-              className="w-full bg-pitch-darker border border-pitch-border rounded-xl px-3.5 py-2 text-xs text-white focus:outline-none focus:border-emerald-500"
+              className="w-full bg-pitch-darker border border-pitch-border rounded-xl px-3.5 py-2 text-xs text-white focus:outline-none focus:border-orange-500"
             />
           </div>
 
@@ -190,7 +190,7 @@ export const PosterGeneratorPage: React.FC = () => {
               type="text"
               value={featuredPlayer}
               onChange={(e) => setFeaturedPlayer(e.target.value)}
-              className="w-full bg-pitch-darker border border-pitch-border rounded-xl px-3.5 py-2 text-xs text-white focus:outline-none focus:border-emerald-500"
+              className="w-full bg-pitch-darker border border-pitch-border rounded-xl px-3.5 py-2 text-xs text-white focus:outline-none focus:border-orange-500"
             />
           </div>
         </Card>
@@ -200,7 +200,7 @@ export const PosterGeneratorPage: React.FC = () => {
           <div
             className={`w-full max-w-lg aspect-[4/5] rounded-3xl p-8 relative flex flex-col justify-between overflow-hidden shadow-2xl border ${
               theme === 'neon'
-                ? 'bg-gradient-to-br from-pitch-darkest via-emerald-950 to-slate-950 border-emerald-500/50 shadow-pitch-glow-lg'
+                ? 'bg-gradient-to-br from-pitch-darkest via-orange-950 to-slate-950 border-orange-500/50 shadow-pitch-glow-lg'
                 : theme === 'gold'
                 ? 'bg-gradient-to-br from-slate-950 via-amber-950 to-stone-950 border-amber-500/50 shadow-[0_0_40px_-5px_rgba(234,179,8,0.3)]'
                 : 'bg-gradient-to-br from-slate-950 via-pitch-darker to-black border-pitch-border'
@@ -208,13 +208,13 @@ export const PosterGeneratorPage: React.FC = () => {
           >
             {/* Background Texture & Pitch Grid */}
             <div className="absolute inset-0 pitch-pattern opacity-30 pointer-events-none" />
-            <div className="absolute -top-24 -right-24 w-64 h-64 rounded-full bg-emerald-500/10 blur-3xl pointer-events-none" />
+            <div className="absolute -top-24 -right-24 w-64 h-64 rounded-full bg-orange-500/10 blur-3xl pointer-events-none" />
 
             {/* Poster Header */}
             <div className="relative z-10 flex items-center justify-between border-b border-white/10 pb-4">
               <div className="flex items-center gap-2">
                 <span className="text-xl">⚽</span>
-                <span className="text-xs font-black tracking-widest text-emerald-400 uppercase">
+                <span className="text-xs font-black tracking-widest text-orange-400 uppercase">
                   PREMIER LEAGUE 2026/27
                 </span>
               </div>
@@ -225,7 +225,7 @@ export const PosterGeneratorPage: React.FC = () => {
 
             {/* Middle Section: Slogan & Matchup */}
             <div className="relative z-10 my-auto text-center space-y-6">
-              <span className="inline-block text-[11px] font-black uppercase tracking-[0.25em] text-emerald-400 bg-emerald-500/10 px-3 py-1 rounded-full border border-emerald-500/30">
+              <span className="inline-block text-[11px] font-black uppercase tracking-[0.25em] text-orange-400 bg-orange-500/10 px-3 py-1 rounded-full border border-orange-500/30">
                 {headline}
               </span>
 
@@ -238,7 +238,7 @@ export const PosterGeneratorPage: React.FC = () => {
                   <h4 className="text-sm sm:text-base font-black text-white leading-tight">
                     {homeTeam}
                   </h4>
-                  <span className="text-[10px] font-mono text-emerald-400">HOME</span>
+                  <span className="text-[10px] font-mono text-orange-400">HOME</span>
                 </div>
 
                 <div className="flex flex-col items-center">
@@ -263,7 +263,7 @@ export const PosterGeneratorPage: React.FC = () => {
 
               {/* Spotlight Star Callout */}
               <div className="inline-flex items-center gap-2 p-2 px-4 rounded-xl bg-white/5 border border-white/10 text-xs">
-                <Sparkles className="w-3.5 h-3.5 text-emerald-400" />
+                <Sparkles className="w-3.5 h-3.5 text-orange-400" />
                 <span className="text-slate-300">Spotlight Player:</span>
                 <strong className="text-white font-mono">{featuredPlayer}</strong>
               </div>
@@ -272,13 +272,13 @@ export const PosterGeneratorPage: React.FC = () => {
             {/* Poster Footer: Logistics */}
             <div className="relative z-10 border-t border-white/10 pt-4 flex flex-col sm:flex-row items-center justify-between text-xs text-slate-300 gap-2">
               <div className="flex items-center gap-1.5">
-                <Calendar className="w-3.5 h-3.5 text-emerald-400" />
+                <Calendar className="w-3.5 h-3.5 text-orange-400" />
                 <span>
                   {matchDate} • {matchTime}
                 </span>
               </div>
               <div className="flex items-center gap-1.5">
-                <MapPin className="w-3.5 h-3.5 text-emerald-400" />
+                <MapPin className="w-3.5 h-3.5 text-orange-400" />
                 <span className="truncate max-w-[180px]">{venue}</span>
               </div>
             </div>

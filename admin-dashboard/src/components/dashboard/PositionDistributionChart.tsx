@@ -9,7 +9,7 @@ interface PositionDistributionChartProps {
 
 const positionIcons: Record<string, React.ReactNode> = {
   FWD: <Crosshair className="w-4 h-4 text-rose-400" />,
-  MID: <Compass className="w-4 h-4 text-emerald-400" />,
+  MID: <Compass className="w-4 h-4 text-orange-400" />,
   DEF: <Shield className="w-4 h-4 text-blue-400" />,
   GK: <ShieldAlert className="w-4 h-4 text-amber-400" />,
 };
@@ -23,14 +23,14 @@ export const PositionDistributionChart: React.FC<PositionDistributionChartProps>
         <div className="flex items-center justify-between mb-4">
           <div>
             <h3 className="text-sm font-bold text-white tracking-tight flex items-center gap-2">
-              <span className="w-2 h-2 rounded-full bg-emerald-400" />
+              <span className="w-2 h-2 rounded-full bg-orange-400" />
               Player Position Distribution
             </h3>
             <p className="text-xs text-slate-400 mt-0.5">
               Approved pool breakdown across squad roles
             </p>
           </div>
-          <span className="text-xs font-mono font-bold text-emerald-400 bg-pitch-darker px-2.5 py-1 rounded-lg border border-pitch-border">
+          <span className="text-xs font-mono font-bold text-orange-400 bg-pitch-darker px-2.5 py-1 rounded-lg border border-pitch-border">
             {total} Players
           </span>
         </div>
@@ -44,7 +44,7 @@ export const PositionDistributionChart: React.FC<PositionDistributionChartProps>
                 key={item.label}
                 style={{
                   width: `${pct}%`,
-                  backgroundColor: item.color || '#10b981',
+                  backgroundColor: item.color || '#f97316',
                 }}
                 className="h-full rounded-sm transition-all duration-500 hover:brightness-125"
                 title={`${item.label}: ${item.value} (${Math.round(pct)}%)`}
@@ -91,7 +91,7 @@ export const PositionDistributionChart: React.FC<PositionDistributionChartProps>
                   <div className="text-sm font-extrabold text-white">
                     {item.value}
                   </div>
-                  <div className="text-[10px] font-mono text-emerald-400">
+                  <div className="text-[10px] font-mono text-orange-400">
                     {pct}%
                   </div>
                 </div>
@@ -103,7 +103,7 @@ export const PositionDistributionChart: React.FC<PositionDistributionChartProps>
 
       <div className="mt-4 pt-3 border-t border-pitch-border/60 flex items-center justify-between text-[11px] text-slate-400">
         <span>Formation target: 4-3-3 balanced</span>
-        <span className="text-emerald-400 font-semibold">Ready for Draft</span>
+        <span className="text-orange-400 font-semibold">Ready for Draft</span>
       </div>
     </Card>
   );

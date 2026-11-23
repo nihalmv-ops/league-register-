@@ -15,7 +15,7 @@ export const Footer: React.FC = () => {
           <span>•</span>
           <span>Verified FA Regulations</span>
           <span>•</span>
-          <span className="text-emerald-400 font-mono">Phase 2 Release</span>
+          <span className="text-orange-400 font-mono">Phase 2 Release</span>
         </div>
       </div>
     </footer>

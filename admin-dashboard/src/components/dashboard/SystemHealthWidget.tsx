@@ -99,7 +99,7 @@ export const SystemHealthWidget: React.FC<SystemHealthWidgetProps> = ({
           <div className="font-bold text-white text-sm">
             {isHealthy ? 'Port 5000' : 'Disconnected'}
           </div>
-          <div className="text-[10px] text-emerald-400 mt-0.5">
+          <div className="text-[10px] text-orange-400 mt-0.5">
             {health?.version || 'Phase 1 Build'}
           </div>
         </div>

@@ -122,7 +122,7 @@ export const FixturesPage: React.FC = () => {
         <div>
           <h2 className="text-xl sm:text-2xl font-black text-white tracking-tight flex items-center gap-2">
             <span>League Fixtures & Match Calendar</span>
-            <span className="text-xs font-mono text-emerald-400 bg-emerald-500/10 px-2 py-0.5 rounded-md border border-emerald-500/20">
+            <span className="text-xs font-mono text-orange-400 bg-orange-500/10 px-2 py-0.5 rounded-md border border-orange-500/20">
               Season 2026-27 Schedule
             </span>
           </h2>
@@ -131,7 +131,7 @@ export const FixturesPage: React.FC = () => {
           </p>
         </div>
 
-        <Badge variant="green" size="md">
+        <Badge variant="orange" size="md">
           {mockFixtures.length} Matches Programmed
         </Badge>
       </div>
@@ -170,7 +170,7 @@ export const FixturesPage: React.FC = () => {
           <Card key={fixture.id} hover glow className="space-y-4">
             {/* Top Bar: Match # and Status */}
             <div className="flex items-center justify-between border-b border-pitch-border/60 pb-3 text-xs">
-              <span className="font-bold text-emerald-400 font-mono">
+              <span className="font-bold text-orange-400 font-mono">
                 Match #{fixture.matchNumber} • {fixture.round}
               </span>
               <Badge variant="blue" size="sm">
@@ -182,7 +182,7 @@ export const FixturesPage: React.FC = () => {
             <div className="flex items-center justify-between py-2">
               {/* Home Team */}
               <div className="flex-1 text-center sm:text-left">
-                <span className="text-[10px] font-mono text-emerald-400 block mb-0.5">
+                <span className="text-[10px] font-mono text-orange-400 block mb-0.5">
                   HOME
                 </span>
                 <h4 className="text-base font-extrabold text-white">{fixture.homeTeam}</h4>

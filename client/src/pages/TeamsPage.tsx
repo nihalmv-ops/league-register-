@@ -193,7 +193,7 @@ export const TeamsPage: React.FC = () => {
         <div>
           <h2 className="text-xl sm:text-2xl font-black text-white tracking-tight flex items-center gap-2">
             <span>League Franchises & Clubs</span>
-            <span className="text-xs font-mono text-emerald-400 bg-emerald-500/10 px-2 py-0.5 rounded-md border border-emerald-500/20">
+            <span className="text-xs font-mono text-orange-400 bg-orange-500/10 px-2 py-0.5 rounded-md border border-orange-500/20">
               {mockTeams.length} Active Teams
             </span>
           </h2>
@@ -238,7 +238,7 @@ export const TeamsPage: React.FC = () => {
               <div>
                 {/* Team Badge & Shortcode */}
                 <div className="flex items-start justify-between mb-4">
-                  <div className="w-12 h-12 rounded-2xl bg-pitch-darker border border-pitch-border flex items-center justify-center text-2xl group-hover:scale-110 group-hover:border-emerald-500/50 group-hover:shadow-pitch-glow transition-all">
+                  <div className="w-12 h-12 rounded-2xl bg-pitch-darker border border-pitch-border flex items-center justify-center text-2xl group-hover:scale-110 group-hover:border-orange-500/50 group-hover:shadow-pitch-glow transition-all">
                     {team.logoBadge}
                   </div>
                   <div className="text-right">
@@ -253,7 +253,7 @@ export const TeamsPage: React.FC = () => {
                 </div>
 
                 {/* Team Names & City */}
-                <h3 className="text-base font-extrabold text-white group-hover:text-emerald-400 transition-colors">
+                <h3 className="text-base font-extrabold text-white group-hover:text-orange-400 transition-colors">
                   {team.name}
                 </h3>
                 <div className="flex items-center gap-1 text-xs text-slate-400 mt-0.5">
@@ -265,13 +265,13 @@ export const TeamsPage: React.FC = () => {
                 <div className="mt-4 p-3 rounded-xl bg-pitch-darker/70 border border-pitch-border/50 space-y-2">
                   <div className="flex justify-between items-center text-xs">
                     <span className="text-slate-400 text-[11px]">Purse Remaining</span>
-                    <span className="font-mono font-bold text-emerald-400">
+                    <span className="font-mono font-bold text-orange-400">
                       {formatCurrency(team.remainingBudget)}
                     </span>
                   </div>
                   <div className="w-full h-1.5 rounded-full bg-slate-800 overflow-hidden">
                     <div
-                      className="h-full bg-gradient-to-r from-emerald-500 to-emerald-400 rounded-full"
+                      className="h-full bg-gradient-to-r from-orange-500 to-amber-400 rounded-full"
                       style={{ width: `${100 - purseUtil}%` }}
                     />
                   </div>
@@ -296,7 +296,7 @@ export const TeamsPage: React.FC = () => {
               {/* Action Button */}
               <div className="mt-4 pt-3 border-t border-pitch-border/60 flex items-center justify-between text-xs">
                 <span className="text-[11px] text-slate-400">Mgr: {team.manager}</span>
-                <span className="text-emerald-400 group-hover:translate-x-1 transition-transform inline-flex items-center gap-0.5 font-semibold">
+                <span className="text-orange-400 group-hover:translate-x-1 transition-transform inline-flex items-center gap-0.5 font-semibold">
                   Inspect
                   <ChevronRight className="w-3.5 h-3.5" />
                 </span>
@@ -355,7 +355,7 @@ export const TeamsPage: React.FC = () => {
               </div>
               <div className="p-3 rounded-xl bg-pitch-card border border-pitch-border">
                 <span className="text-slate-400 block text-[11px]">Available Funds</span>
-                <span className="text-sm font-bold text-emerald-400 font-mono">
+                <span className="text-sm font-bold text-orange-400 font-mono">
                   {formatCurrency(selectedTeam.remainingBudget)}
                 </span>
               </div>
@@ -377,7 +377,7 @@ export const TeamsPage: React.FC = () => {
               </div>
               <div className="flex justify-between items-center">
                 <span className="text-slate-400">Squad Slots Filled:</span>
-                <span className="font-bold text-emerald-400">
+                <span className="font-bold text-orange-400">
                   {selectedTeam.squadCount} of {selectedTeam.maxSquadSize} Slots
                 </span>
               </div>

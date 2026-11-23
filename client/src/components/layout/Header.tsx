@@ -91,7 +91,7 @@ export const Header: React.FC<HeaderProps> = ({
             <h1 className="text-base sm:text-lg font-extrabold text-white tracking-tight truncate">
               {currentRoute.title}
             </h1>
-            <span className="hidden sm:inline-flex items-center gap-1 text-[11px] font-semibold text-emerald-400/90 bg-emerald-500/10 px-2 py-0.5 rounded-md border border-emerald-500/20">
+            <span className="hidden sm:inline-flex items-center gap-1 text-[11px] font-semibold text-orange-400/90 bg-orange-500/10 px-2 py-0.5 rounded-md border border-orange-500/20">
               <Radio className="w-2.5 h-2.5 animate-pulse" />
               2026-27 Season
             </span>
@@ -137,7 +137,7 @@ export const Header: React.FC<HeaderProps> = ({
             }
           >
             <RotateCw
-              className={`w-4 h-4 text-emerald-400 ${
+              className={`w-4 h-4 text-orange-400 ${
                 isRefreshing ? 'animate-spin' : ''
               }`}
             />
@@ -151,20 +151,20 @@ export const Header: React.FC<HeaderProps> = ({
             title="Notifications"
           >
             <Bell className="w-4 h-4" />
-            <span className="absolute top-1.5 right-1.5 w-2 h-2 rounded-full bg-emerald-400 ring-2 ring-pitch-darkest" />
+            <span className="absolute top-1.5 right-1.5 w-2 h-2 rounded-full bg-orange-400 ring-2 ring-pitch-darkest" />
           </button>
         </div>
 
         {/* Admin Profile */}
         <div className="flex items-center gap-2 pl-2 border-l border-pitch-border/60">
-          <div className="w-8 h-8 rounded-xl bg-gradient-to-tr from-slate-800 to-slate-700 border border-pitch-border flex items-center justify-center font-bold text-xs text-emerald-400">
+          <div className="w-8 h-8 rounded-xl bg-gradient-to-tr from-slate-800 to-slate-700 border border-pitch-border flex items-center justify-center font-bold text-xs text-orange-400">
             AD
           </div>
           <div className="hidden xl:flex flex-col text-left">
             <span className="text-xs font-bold text-slate-200 leading-tight">
               League Admin
             </span>
-            <span className="text-[10px] text-emerald-400 leading-tight">
+            <span className="text-[10px] text-orange-400 leading-tight">
               Head Commissioner
             </span>
           </div>

@@ -109,7 +109,7 @@ const demoApplications: PlayerApplication[] = [
 const positionIcons: Record<PlayingPosition, React.ReactNode> = {
   Goalkeeper: <ShieldAlert className="w-3.5 h-3.5 text-amber-400" />,
   Defender: <Shield className="w-3.5 h-3.5 text-blue-400" />,
-  Midfielder: <Compass className="w-3.5 h-3.5 text-emerald-400" />,
+  Midfielder: <Compass className="w-3.5 h-3.5 text-orange-400" />,
   Forward: <Crosshair className="w-3.5 h-3.5 text-rose-400" />,
 };
 
@@ -305,10 +305,11 @@ export const RegistrationsPage: React.FC = () => {
   const filteredPlayers = players.filter((p) => {
     const matchesStatus = statusFilter === 'ALL' || p.status === statusFilter;
     const matchesPosition = positionFilter === 'ALL' || p.playingPosition === positionFilter;
+    const searchLower = searchTerm.toLowerCase();
     const matchesSearch =
-      p.fullName.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      p.email.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      p.registrationId.toLowerCase().includes(searchTerm.toLowerCase());
+      p.fullName.toLowerCase().includes(searchLower) ||
+      (p.email ? p.email.toLowerCase().includes(searchLower) : false) ||
+      p.registrationId.toLowerCase().includes(searchLower);
     return matchesStatus && matchesPosition && matchesSearch;
   });
 
@@ -320,8 +321,8 @@ export const RegistrationsPage: React.FC = () => {
     <div className="space-y-6 animate-in fade-in duration-300">
       {/* Toast Notification */}
       {toastMessage && (
-        <div className="fixed bottom-6 right-6 z-50 p-4 rounded-xl bg-pitch-card border border-emerald-500/50 shadow-pitch-glow text-xs text-white flex items-center gap-2 animate-in slide-in-from-bottom duration-200">
-          <CheckCircle2 className="w-4 h-4 text-emerald-400 shrink-0" />
+        <div className="fixed bottom-6 right-6 z-50 p-4 rounded-xl bg-pitch-card border border-orange-500/50 shadow-pitch-glow text-xs text-white flex items-center gap-2 animate-in slide-in-from-bottom duration-200">
+          <CheckCircle2 className="w-4 h-4 text-orange-400 shrink-0" />
           <span>{toastMessage}</span>
         </div>
       )}
@@ -333,12 +334,12 @@ export const RegistrationsPage: React.FC = () => {
             <h2 className="text-xl sm:text-2xl font-black text-white tracking-tight">
               Player Applications & Verification
             </h2>
-            <Badge variant="green" size="sm">
+            <Badge variant="orange" size="sm">
               Phase 2 Connected
             </Badge>
           </div>
           <p className="text-xs sm:text-sm text-slate-400 mt-0.5">
-            Audit public player submissions with all six required fields. Only APPROVED players
+            Audit public player submissions with all six submitted fields. Only APPROVED players
             can enter the auction draft.
           </p>
         </div>
@@ -347,7 +348,7 @@ export const RegistrationsPage: React.FC = () => {
         <div className="flex items-center gap-2">
           {isAdminLoggedIn ? (
             <span className="text-xs text-slate-300 bg-pitch-darker px-3 py-1.5 rounded-xl border border-pitch-border flex items-center gap-2">
-              <span className="w-2 h-2 rounded-full bg-emerald-400" />
+              <span className="w-2 h-2 rounded-full bg-orange-400" />
               <span className="font-semibold">{currentAdmin?.name || 'Administrator'}</span>
             </span>
           ) : (
@@ -480,7 +481,7 @@ export const RegistrationsPage: React.FC = () => {
                 onClick={() => setStatusFilter(st.id)}
                 className={`px-3 py-1.5 rounded-xl text-xs font-semibold whitespace-nowrap transition-colors ${
                   statusFilter === st.id
-                    ? 'bg-pitch-card text-emerald-400 border border-emerald-500/40'
+                    ? 'bg-pitch-card text-orange-400 border border-orange-500/40'
                     : 'bg-pitch-darker text-slate-400 hover:text-white border border-pitch-border'
                 }`}
               >
@@ -540,7 +541,7 @@ export const RegistrationsPage: React.FC = () => {
                           />
                         </div>
                         <div>
-                          <div className="font-extrabold text-white text-sm hover:text-emerald-400 transition-colors">
+                          <div className="font-extrabold text-white text-sm hover:text-orange-400 transition-colors">
                             {player.fullName}
                           </div>
                           <span className="text-[10px] text-slate-400">
@@ -552,7 +553,7 @@ export const RegistrationsPage: React.FC = () => {
 
                     {/* Registration ID */}
                     <td className="py-3.5 px-4">
-                      <span className="font-mono font-bold text-emerald-400 bg-pitch-darker px-2 py-1 rounded-lg border border-pitch-border">
+                      <span className="font-mono font-bold text-orange-400 bg-pitch-darker px-2 py-1 rounded-lg border border-pitch-border">
                         {player.registrationId}
                       </span>
                     </td>
@@ -570,14 +571,14 @@ export const RegistrationsPage: React.FC = () => {
                       <div className="text-slate-200 font-mono">
                         {new Date(player.dateOfBirth).toLocaleDateString()}
                       </div>
-                      <span className="text-[10px] text-emerald-400 font-bold">
+                      <span className="text-[10px] text-orange-400 font-bold">
                         Age: {calculateAge(player.dateOfBirth)}
                       </span>
                     </td>
 
                     {/* 3. Phone & 4. Email */}
                     <td className="py-3.5 px-4">
-                      <div className="text-slate-200 font-medium">{player.email}</div>
+                      <div className="text-slate-200 font-medium">{player.email || <span className="text-slate-500 italic">No email</span>}</div>
                       <div className="text-[10px] text-slate-400 font-mono">{player.phoneNumber}</div>
                     </td>
 
@@ -692,7 +693,7 @@ export const RegistrationsPage: React.FC = () => {
           <div className="space-y-5 text-xs">
             {/* Header with Photo & Name */}
             <div className="flex flex-col sm:flex-row items-center gap-5 p-5 rounded-2xl bg-pitch-dark border border-pitch-border">
-              <div className="w-24 h-24 rounded-2xl overflow-hidden border-2 border-emerald-500/50 shadow-pitch-glow shrink-0 bg-slate-900">
+              <div className="w-24 h-24 rounded-2xl overflow-hidden border-2 border-orange-500/50 shadow-pitch-glow shrink-0 bg-slate-900">
                 <img
                   src={selectedPlayer.photoUrl}
                   alt={selectedPlayer.fullName}
@@ -717,7 +718,7 @@ export const RegistrationsPage: React.FC = () => {
                 </div>
 
                 <div className="flex items-center justify-center sm:justify-start gap-2 text-slate-300">
-                  <span className="font-mono font-bold text-emerald-400">
+                  <span className="font-mono font-bold text-orange-400">
                     {selectedPlayer.registrationId}
                   </span>
                   <span>•</span>
@@ -739,7 +740,7 @@ export const RegistrationsPage: React.FC = () => {
                 {/* 1. Full Name */}
                 <div className="p-3 rounded-xl bg-pitch-card border border-pitch-border space-y-1">
                   <span className="text-slate-400 flex items-center gap-1 text-[11px]">
-                    <User className="w-3.5 h-3.5 text-emerald-400" />
+                    <User className="w-3.5 h-3.5 text-orange-400" />
                     1. Full Name
                   </span>
                   <span className="font-extrabold text-white text-sm block">
@@ -750,7 +751,7 @@ export const RegistrationsPage: React.FC = () => {
                 {/* 2. Date of Birth */}
                 <div className="p-3 rounded-xl bg-pitch-card border border-pitch-border space-y-1">
                   <span className="text-slate-400 flex items-center gap-1 text-[11px]">
-                    <Calendar className="w-3.5 h-3.5 text-emerald-400" />
+                    <Calendar className="w-3.5 h-3.5 text-orange-400" />
                     2. Date of Birth (Age)
                   </span>
                   <span className="font-bold text-white text-sm block">
@@ -761,7 +762,7 @@ export const RegistrationsPage: React.FC = () => {
                 {/* 3. Phone Number */}
                 <div className="p-3 rounded-xl bg-pitch-card border border-pitch-border space-y-1">
                   <span className="text-slate-400 flex items-center gap-1 text-[11px]">
-                    <Phone className="w-3.5 h-3.5 text-emerald-400" />
+                    <Phone className="w-3.5 h-3.5 text-orange-400" />
                     3. Phone Number
                   </span>
                   <span className="font-mono font-bold text-white text-sm block">
@@ -772,21 +773,21 @@ export const RegistrationsPage: React.FC = () => {
                 {/* 4. Email */}
                 <div className="p-3 rounded-xl bg-pitch-card border border-pitch-border space-y-1">
                   <span className="text-slate-400 flex items-center gap-1 text-[11px]">
-                    <Mail className="w-3.5 h-3.5 text-emerald-400" />
-                    4. Email Address
+                    <Mail className="w-3.5 h-3.5 text-orange-400" />
+                    4. Email Address (Optional)
                   </span>
                   <span className="font-medium text-white text-sm block truncate">
-                    {selectedPlayer.email}
+                    {selectedPlayer.email || <span className="text-slate-500 italic">Not provided</span>}
                   </span>
                 </div>
 
                 {/* 5. Playing Position */}
                 <div className="p-3 rounded-xl bg-pitch-card border border-pitch-border space-y-1">
                   <span className="text-slate-400 flex items-center gap-1 text-[11px]">
-                    <Compass className="w-3.5 h-3.5 text-emerald-400" />
+                    <Compass className="w-3.5 h-3.5 text-orange-400" />
                     5. Playing Position
                   </span>
-                  <span className="font-bold text-emerald-400 text-sm block">
+                  <span className="font-bold text-orange-400 text-sm block">
                     {selectedPlayer.playingPosition}
                   </span>
                 </div>
@@ -794,14 +795,14 @@ export const RegistrationsPage: React.FC = () => {
                 {/* 6. Profile Photo URL */}
                 <div className="p-3 rounded-xl bg-pitch-card border border-pitch-border space-y-1">
                   <span className="text-slate-400 flex items-center gap-1 text-[11px]">
-                    <Camera className="w-3.5 h-3.5 text-emerald-400" />
+                    <Camera className="w-3.5 h-3.5 text-orange-400" />
                     6. Cloudinary / Image URL
                   </span>
                   <a
                     href={selectedPlayer.photoUrl}
                     target="_blank"
                     rel="noreferrer"
-                    className="font-mono text-xs text-blue-400 hover:underline block truncate"
+                    className="font-mono text-xs text-orange-400 hover:underline block truncate"
                   >
                     {selectedPlayer.photoUrl}
                   </a>
@@ -818,7 +819,7 @@ export const RegistrationsPage: React.FC = () => {
               {selectedPlayer.reviewedBy && (
                 <div className="flex justify-between items-center">
                   <span className="text-slate-400">Reviewed By:</span>
-                  <span className="font-bold text-emerald-400">{selectedPlayer.reviewedBy}</span>
+                  <span className="font-bold text-orange-400">{selectedPlayer.reviewedBy}</span>
                 </div>
               )}
               {selectedPlayer.reviewedAt && (
@@ -893,7 +894,7 @@ export const RegistrationsPage: React.FC = () => {
               type="email"
               value={loginEmail}
               onChange={(e) => setLoginEmail(e.target.value)}
-              className="w-full bg-pitch-darker border border-pitch-border rounded-xl px-3 py-2 text-white focus:outline-none focus:border-emerald-500 text-xs"
+              className="w-full bg-pitch-darker border border-pitch-border rounded-xl px-3 py-2 text-white focus:outline-none focus:border-orange-500 text-xs"
             />
           </div>
 
@@ -903,13 +904,13 @@ export const RegistrationsPage: React.FC = () => {
               type="password"
               value={loginPassword}
               onChange={(e) => setLoginPassword(e.target.value)}
-              className="w-full bg-pitch-darker border border-pitch-border rounded-xl px-3 py-2 text-white focus:outline-none focus:border-emerald-500 text-xs"
+              className="w-full bg-pitch-darker border border-pitch-border rounded-xl px-3 py-2 text-white focus:outline-none focus:border-orange-500 text-xs"
             />
           </div>
 
           <p className="text-[11px] text-slate-400">
-            Default credentials: <code className="text-emerald-400">admin@football.league</code> /{' '}
-            <code className="text-emerald-400">Admin@123456</code>
+            Default credentials: <code className="text-orange-400">admin@football.league</code> /{' '}
+            <code className="text-orange-400">Admin@123456</code>
           </p>
 
           <Button

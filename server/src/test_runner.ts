@@ -237,8 +237,8 @@ async function runTests() {
     );
     assert(badEmailRes.status === 400, 'Registration with invalid email format returns 400 Bad Request');
 
-    // 5. Successful Player Registration (All 6 Required Fields)
-    console.log('\n--- 5. Successful Player Registration ---');
+    // 5. Successful Player Registration (All Fields, and Optional Email)
+    console.log('\n--- 5. Successful Player Registration (With & Without Email) ---');
     const validPlayerData = createMultipartBody(
       {
         fullName: 'Kylian Mbappe',
@@ -261,6 +261,43 @@ async function runTests() {
     assert(regRes.data.data?.status === 'PENDING', 'New registration status defaults to PENDING');
 
     const createdRegId = regRes.data.data.registrationId;
+
+    // 5b. Registration Without Email (Email is Optional)
+    const noEmailPlayerData = createMultipartBody(
+      {
+        fullName: 'Erling Haaland',
+        dateOfBirth: '2000-07-21',
+        phoneNumber: '+47 987 65 432',
+        playingPosition: 'Forward',
+      },
+      { name: 'photo', filename: 'haaland.png', contentType: 'image/png', data: dummyImage }
+    );
+    const noEmailRes = await callExpress(
+      'POST',
+      '/api/players/register',
+      noEmailPlayerData.headers,
+      noEmailPlayerData.body
+    );
+    assert(noEmailRes.status === 201, 'Registration without email succeeds (Email is optional)');
+    assert(typeof noEmailRes.data.data?.registrationId === 'string', 'No-email registration generates unique registrationId');
+
+    // 5c. Second Registration Without Email (Ensures no unique null index conflict)
+    const secondNoEmailData = createMultipartBody(
+      {
+        fullName: 'Lamine Yamal',
+        dateOfBirth: '2007-07-13',
+        phoneNumber: '+34 600 111 222',
+        playingPosition: 'Forward',
+      },
+      { name: 'photo', filename: 'yamal.png', contentType: 'image/png', data: dummyImage }
+    );
+    const secondNoEmailRes = await callExpress(
+      'POST',
+      '/api/players/register',
+      secondNoEmailData.headers,
+      secondNoEmailData.body
+    );
+    assert(secondNoEmailRes.status === 201, 'Second registration without email succeeds without duplicate conflict');
 
     // 6. Duplicate Registration Checks
     console.log('\n--- 6. Duplicate Registration Prevention ---');

@@ -80,7 +80,7 @@ export const MatchResultsPage: React.FC = () => {
         <div>
           <h2 className="text-xl sm:text-2xl font-black text-white tracking-tight flex items-center gap-2">
             <span>Match Results & Performance Audit</span>
-            <span className="text-xs font-mono text-emerald-400 bg-emerald-500/10 px-2 py-0.5 rounded-md border border-emerald-500/20">
+            <span className="text-xs font-mono text-orange-400 bg-orange-500/10 px-2 py-0.5 rounded-md border border-orange-500/20">
               Pre-Season & Exhibition Scores
             </span>
           </h2>
@@ -89,7 +89,7 @@ export const MatchResultsPage: React.FC = () => {
           </p>
         </div>
 
-        <Badge variant="green" size="md">
+        <Badge variant="orange" size="md">
           {mockResults.length} Completed Matches
         </Badge>
       </div>
@@ -122,7 +122,7 @@ export const MatchResultsPage: React.FC = () => {
             <div className="grid grid-cols-1 sm:grid-cols-3 items-center gap-4 py-2 text-center sm:text-left">
               {/* Home Team */}
               <div className="flex items-center sm:justify-start justify-center gap-3">
-                <div className="w-10 h-10 rounded-xl bg-pitch-darker border border-pitch-border flex items-center justify-center font-bold text-xs text-emerald-400">
+                <div className="w-10 h-10 rounded-xl bg-pitch-darker border border-pitch-border flex items-center justify-center font-bold text-xs text-orange-400">
                   {result.homeTeamCode}
                 </div>
                 <div>
@@ -142,7 +142,7 @@ export const MatchResultsPage: React.FC = () => {
                     {result.awayScore}
                   </span>
                 </div>
-                <span className="text-[10px] font-bold text-emerald-400 bg-emerald-500/10 px-2 py-0.5 rounded-full border border-emerald-500/20 mt-1">
+                <span className="text-[10px] font-bold text-orange-400 bg-orange-500/10 px-2 py-0.5 rounded-full border border-orange-500/20 mt-1">
                   OFFICIAL RESULT
                 </span>
               </div>
@@ -222,13 +222,13 @@ export const MatchResultsPage: React.FC = () => {
                     className="flex items-center justify-between p-2 rounded-lg bg-pitch-dark border border-pitch-border"
                   >
                     <div className="flex items-center gap-2">
-                      <span className="w-6 h-6 rounded-full bg-emerald-500/10 text-emerald-400 flex items-center justify-center font-bold text-[10px]">
+                      <span className="w-6 h-6 rounded-full bg-orange-500/10 text-orange-400 flex items-center justify-center font-bold text-[10px]">
                         ⚽
                       </span>
                       <span className="font-bold text-white">{s.player}</span>
                       <span className="text-[10px] text-slate-400">({s.team})</span>
                     </div>
-                    <span className="font-mono font-bold text-emerald-400">{s.minute}'</span>
+                    <span className="font-mono font-bold text-orange-400">{s.minute}'</span>
                   </div>
                 ))}
               </div>

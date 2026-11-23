@@ -4,7 +4,7 @@ export interface RegistrationFormData {
   fullName: string;
   dateOfBirth: string;
   phoneNumber: string;
-  email: string;
+  email?: string;
   playingPosition: PlayingPosition | '';
   photo: File | null;
 }
@@ -12,7 +12,7 @@ export interface RegistrationFormData {
 export interface RegistrationSuccessData {
   registrationId: string;
   fullName: string;
-  email: string;
+  email?: string;
   playingPosition: PlayingPosition;
   photoUrl: string;
   status: 'PENDING' | 'APPROVED' | 'REJECTED';

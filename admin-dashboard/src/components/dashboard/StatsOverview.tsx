@@ -24,7 +24,7 @@ export const StatsOverview: React.FC<StatsOverviewProps> = ({ stats, onStatClick
         value={stats.totalRegisteredPlayers}
         subtitle="Total applicants"
         icon={Users}
-        color="blue"
+        color="orange"
         trend={{
           value: '+18%',
           isPositive: true,

@@ -9,7 +9,7 @@ export interface IPlayer extends Document {
   fullName: string;
   dateOfBirth: Date;
   phoneNumber: string;
-  email: string;
+  email?: string;
   playingPosition: PlayingPosition;
   photoUrl: string;
   photoPublicId?: string;
@@ -62,8 +62,8 @@ const PlayerSchema = new Schema<IPlayer>(
     },
     email: {
       type: String,
-      required: [true, 'Email is required'],
-      unique: true,
+      required: false,
+      sparse: true,
       index: true,
       trim: true,
       lowercase: true,

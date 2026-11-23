@@ -58,7 +58,7 @@ export const PointsTablePage: React.FC = () => {
         <div>
           <h2 className="text-xl sm:text-2xl font-black text-white tracking-tight flex items-center gap-2">
             <span>Championship Points Table</span>
-            <span className="text-xs font-mono text-emerald-400 bg-emerald-500/10 px-2 py-0.5 rounded-md border border-emerald-500/20">
+            <span className="text-xs font-mono text-orange-400 bg-orange-500/10 px-2 py-0.5 rounded-md border border-orange-500/20">
               Season 2026/27 Live Standings
             </span>
           </h2>
@@ -69,8 +69,8 @@ export const PointsTablePage: React.FC = () => {
 
         {/* Legend */}
         <div className="flex items-center gap-3 text-xs">
-          <span className="flex items-center gap-1.5 text-emerald-400">
-            <span className="w-2.5 h-2.5 rounded-full bg-emerald-400" />
+          <span className="flex items-center gap-1.5 text-orange-400">
+            <span className="w-2.5 h-2.5 rounded-full bg-orange-400" />
             Playoffs Zone (Top 4)
           </span>
           <span className="flex items-center gap-1.5 text-slate-400">
@@ -107,7 +107,7 @@ export const PointsTablePage: React.FC = () => {
                   <tr
                     key={team.rank}
                     className={`hover:bg-pitch-cardHover transition-colors ${
-                      isTop4 ? 'bg-emerald-950/10' : ''
+                      isTop4 ? 'bg-orange-950/10' : ''
                     }`}
                   >
                     {/* Rank */}
@@ -118,7 +118,7 @@ export const PointsTablePage: React.FC = () => {
                             team.rank === 1
                               ? 'bg-amber-500/20 text-amber-400 border border-amber-500/30 shadow-sm'
                               : isTop4
-                              ? 'bg-emerald-500/10 text-emerald-400 border border-emerald-500/20'
+                              ? 'bg-orange-500/10 text-orange-400 border border-orange-500/20'
                               : 'text-slate-400 bg-pitch-darker border border-pitch-border'
                           }`}
                         >
@@ -141,7 +141,7 @@ export const PointsTablePage: React.FC = () => {
                     <td className="py-3.5 px-3 text-center font-mono font-medium text-slate-300">
                       {team.played}
                     </td>
-                    <td className="py-3.5 px-3 text-center font-mono font-semibold text-emerald-400">
+                    <td className="py-3.5 px-3 text-center font-mono font-semibold text-orange-400">
                       {team.won}
                     </td>
                     <td className="py-3.5 px-3 text-center font-mono text-slate-400">
@@ -159,7 +159,7 @@ export const PointsTablePage: React.FC = () => {
                     <td
                       className={`py-3.5 px-3 text-center font-mono font-bold ${
                         team.goalDifference > 0
-                          ? 'text-emerald-400'
+                          ? 'text-orange-400'
                           : team.goalDifference < 0
                           ? 'text-rose-400'
                           : 'text-slate-400'

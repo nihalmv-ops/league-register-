@@ -125,7 +125,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
       {/* Brand Header */}
       <div className="h-16 px-4 flex items-center justify-between border-b border-pitch-border bg-pitch-darkest/40">
         <div className="flex items-center gap-3 overflow-hidden">
-          <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-emerald-400 to-emerald-600 flex items-center justify-center text-slate-950 font-black shadow-pitch-glow shrink-0">
+          <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-orange-400 to-orange-600 flex items-center justify-center text-slate-950 font-black shadow-pitch-glow shrink-0">
             <span className="text-xl">⚽</span>
           </div>
           {(!collapsed || mobileOpen) && (
@@ -133,7 +133,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
               <span className="text-sm font-extrabold text-white tracking-tight leading-tight truncate">
                 PREMIER LEAGUE
               </span>
-              <span className="text-[10px] font-semibold tracking-wider text-emerald-400 uppercase truncate">
+              <span className="text-[10px] font-semibold tracking-wider text-orange-400 uppercase truncate">
                 Auction & Admin Hub
               </span>
             </div>
@@ -175,7 +175,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
                 className={({ isActive }) =>
                   `group relative flex items-center gap-3 px-3 py-2.5 rounded-xl text-xs sm:text-sm font-medium transition-all duration-200 ${
                     isActive
-                      ? 'bg-emerald-500/10 text-emerald-400 border border-emerald-500/30 shadow-pitch-glow'
+                      ? 'bg-orange-500/10 text-orange-400 border border-orange-500/30 shadow-pitch-glow'
                       : 'text-slate-400 hover:text-slate-100 hover:bg-pitch-card/70 border border-transparent'
                   } ${collapsed && !mobileOpen ? 'justify-center px-2' : ''}`
                 }
@@ -231,7 +231,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
           <div className="p-2.5 rounded-xl bg-pitch-card/60 border border-pitch-border/60 text-xs">
             <div className="flex items-center justify-between mb-1">
               <span className="text-slate-400 font-semibold text-[11px]">System Phase</span>
-              <span className="text-[10px] font-bold text-emerald-400 bg-emerald-500/10 px-2 py-0.5 rounded-full border border-emerald-500/20">
+              <span className="text-[10px] font-bold text-orange-400 bg-orange-500/10 px-2 py-0.5 rounded-full border border-orange-500/20">
                 Phase 1 Active
               </span>
             </div>

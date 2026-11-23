@@ -22,7 +22,7 @@ export const TeamBudgetTable: React.FC<TeamBudgetTableProps> = ({ teams }) => {
       <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 mb-5">
         <div>
           <h3 className="text-sm font-bold text-white tracking-tight flex items-center gap-2">
-            <span className="w-2 h-2 rounded-full bg-emerald-400" />
+            <span className="w-2 h-2 rounded-full bg-orange-400" />
             Franchise Purse & Budget Utilization
           </h3>
           <p className="text-xs text-slate-400 mt-0.5">
@@ -32,7 +32,7 @@ export const TeamBudgetTable: React.FC<TeamBudgetTableProps> = ({ teams }) => {
 
         <Link
           to="/teams"
-          className="inline-flex items-center gap-1 text-xs text-emerald-400 hover:text-emerald-300 font-semibold transition-colors"
+          className="inline-flex items-center gap-1 text-xs text-orange-400 hover:text-orange-300 font-semibold transition-colors"
         >
           <span>View All 8 Teams</span>
           <ArrowUpRight className="w-3.5 h-3.5" />
@@ -66,11 +66,11 @@ export const TeamBudgetTable: React.FC<TeamBudgetTableProps> = ({ teams }) => {
                   {/* Team Name */}
                   <td className="py-3.5 px-3">
                     <div className="flex items-center gap-3">
-                      <div className="w-8 h-8 rounded-xl bg-slate-800/80 border border-pitch-border flex items-center justify-center font-bold text-xs text-emerald-400 group-hover:border-emerald-500/40 group-hover:shadow-pitch-glow transition-all">
+                      <div className="w-8 h-8 rounded-xl bg-slate-800/80 border border-pitch-border flex items-center justify-center font-bold text-xs text-orange-400 group-hover:border-orange-500/40 group-hover:shadow-pitch-glow transition-all">
                         <Shield className="w-4 h-4" />
                       </div>
                       <div>
-                        <div className="font-bold text-white group-hover:text-emerald-400 transition-colors">
+                        <div className="font-bold text-white group-hover:text-orange-400 transition-colors">
                           {team.teamName}
                         </div>
                         <div className="text-[10px] text-slate-400">
@@ -106,7 +106,7 @@ export const TeamBudgetTable: React.FC<TeamBudgetTableProps> = ({ teams }) => {
                   </td>
 
                   {/* Remaining */}
-                  <td className="py-3.5 px-3 text-right font-mono font-bold text-emerald-400">
+                  <td className="py-3.5 px-3 text-right font-mono font-bold text-orange-400">
                     {formatCurrency(team.remainingBudget)}
                   </td>
 
@@ -121,7 +121,7 @@ export const TeamBudgetTable: React.FC<TeamBudgetTableProps> = ({ teams }) => {
                           className={`h-full rounded-full transition-all duration-500 ${
                             spentPct > 70
                               ? 'bg-gradient-to-r from-amber-500 to-rose-500'
-                              : 'bg-gradient-to-r from-emerald-500 to-emerald-400'
+                              : 'bg-gradient-to-r from-orange-500 to-amber-400'
                           }`}
                           style={{ width: `${spentPct}%` }}
                         />
