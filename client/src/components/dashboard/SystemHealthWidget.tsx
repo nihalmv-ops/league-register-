@@ -148,7 +148,7 @@ export const SystemHealthWidget: React.FC<SystemHealthWidgetProps> = ({
               : 'N/A'}
           </div>
           <div className="text-[10px] text-slate-400 mt-0.5">
-            Node {health?.system?.nodeVersion || process.version}
+            Node {health?.system?.nodeVersion || 'v20+'}
           </div>
         </div>
       </div>
